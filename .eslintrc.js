@@ -32,5 +32,6 @@ module.exports = {
         'jsx-a11y/label-has-associated-control': [2, { assert: 'either' }],
         'react/jsx-props-no-spreading': [0],
         'react/jsx-fragments': ['error', 'element'],
+        'max-len': [0],
     },
 };

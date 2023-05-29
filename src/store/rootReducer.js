@@ -10,6 +10,7 @@ import quickviewReducer from './quickview';
 import sidebarReducer from './sidebar';
 import version from './version';
 import wishlistReducer from './wishlist';
+import authReducer from './auth';
 
 export default combineReducers({
     version: (state = version) => state,
@@ -21,4 +22,5 @@ export default combineReducers({
     quickview: quickviewReducer,
     sidebar: sidebarReducer,
     wishlist: wishlistReducer,
+    auth: authReducer,
 });

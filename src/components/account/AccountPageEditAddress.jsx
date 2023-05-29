@@ -1,5 +1,5 @@
 // react
-import React from 'react';
+import React, { useState } from 'react';
 
 // third-party
 import { Helmet } from 'react-helmet-async';
@@ -7,8 +7,31 @@ import { Helmet } from 'react-helmet-async';
 // data stubs
 import theme from '../../data/theme';
 
+// apis
+
 export default function AccountPageEditAddress() {
+    const [address, setAddress] = useState({
+        country: '',
+        city: '',
+        postcode: '',
+        address: '',
+    });
+
+    // const [countries, setCountries] = useState([]);
+
+    // useEffect(() => {
+
+    // }, []);
+
+    function onChangeAddress(e) {
+        setAddress((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    }
+
     return (
+
         <div className="card">
             <Helmet>
                 <title>{`Edit Address — ${theme.name}`}</title>
@@ -28,6 +51,9 @@ export default function AccountPageEditAddress() {
                                     type="text"
                                     className="form-control"
                                     id="checkout-first-name"
+                                    name="firstName"
+                                    value={address.firstname}
+                                    onChange={onChangeAddress}
                                     placeholder="First Name"
                                 />
                             </div>
@@ -37,7 +63,10 @@ export default function AccountPageEditAddress() {
                                     type="text"
                                     className="form-control"
                                     id="checkout-last-name"
+                                    name="lastName"
                                     placeholder="Last Name"
+                                    value={address.lastName}
+                                    onChange={onChangeAddress}
                                 />
                             </div>
                         </div>

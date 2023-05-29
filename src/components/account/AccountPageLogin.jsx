@@ -7,14 +7,21 @@ import { Link } from 'react-router-dom';
 
 // application
 import PageHeader from '../shared/PageHeader';
-import { Check9x7Svg } from '../../svg';
 
 // data stubs
 import theme from '../../data/theme';
 
+// apis
+import { loginUser, signUpUser } from '../../api/auth';
+
 export default function AccountPageLogin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [regEmail, setRegEmail] = useState('');
+    const [regName, setRegName] = useState('');
+    const [regphone, setRegPhone] = useState('');
+    const [regPass, setRegPass] = useState('');
+    const [regMatchingPass, setRegMatchingPass] = useState('');
 
     const breadcrumb = [
         { title: 'Home', url: '/' },
@@ -23,7 +30,13 @@ export default function AccountPageLogin() {
 
     function submitLogin(e) {
         e.preventDefault();
-        console.log(email, password);
+        loginUser({ email, password }, (success) => console.log(success, 'login success'), (fail) => { console.log(fail, 'fial'); });
+    }
+    function register(e) {
+        e.preventDefault();
+        signUpUser({
+            name: regName, email: regEmail, password: regPass, phone: regphone,
+        }, (success) => console.log(success), (fail) => console.log(fail));
     }
 
     return (
@@ -67,24 +80,6 @@ export default function AccountPageLogin() {
                                                 <Link to="/">Forgotten Password</Link>
                                             </small>
                                         </div>
-                                        <div className="form-group">
-                                            <div className="form-check">
-                                                <span className="form-check-input input-check">
-                                                    <span className="input-check__body">
-                                                        <input
-                                                            id="login-remember"
-                                                            type="checkbox"
-                                                            className="input-check__input"
-                                                        />
-                                                        <span className="input-check__box" />
-                                                        <Check9x7Svg className="input-check__icon" />
-                                                    </span>
-                                                </span>
-                                                <label className="form-check-label" htmlFor="login-remember">
-                                                    Remember Me
-                                                </label>
-                                            </div>
-                                        </div>
                                         <button type="submit" onClick={submitLogin} className="btn btn-primary mt-2 mt-md-3 mt-lg-4">
                                             Login
                                         </button>
@@ -98,12 +93,38 @@ export default function AccountPageLogin() {
                                     <h3 className="card-title">Register</h3>
                                     <form>
                                         <div className="form-group">
+                                            <label htmlFor="name">Full Name</label>
+                                            <input
+                                                id="name"
+                                                type="text"
+                                                name="name"
+                                                className="form-control"
+                                                placeholder="Enter Name"
+                                                value={regName}
+                                                onChange={(e) => setRegName(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="phone">Phone</label>
+                                            <input
+                                                id="phone"
+                                                type="text"
+                                                name="phone"
+                                                className="form-control"
+                                                placeholder="Enter Phone"
+                                                value={regphone}
+                                                onChange={(e) => setRegPhone(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="form-group">
                                             <label htmlFor="register-email">Email address</label>
                                             <input
                                                 id="register-email"
                                                 type="email"
                                                 className="form-control"
                                                 placeholder="Enter email"
+                                                value={regEmail}
+                                                onChange={(e) => setRegEmail(e.target.value)}
                                             />
                                         </div>
                                         <div className="form-group">
@@ -113,6 +134,8 @@ export default function AccountPageLogin() {
                                                 type="password"
                                                 className="form-control"
                                                 placeholder="Password"
+                                                value={regPass}
+                                                onChange={(e) => setRegPass(e.target.value)}
                                             />
                                         </div>
                                         <div className="form-group">
@@ -122,9 +145,11 @@ export default function AccountPageLogin() {
                                                 type="password"
                                                 className="form-control"
                                                 placeholder="Password"
+                                                value={regMatchingPass}
+                                                onChange={(e) => setRegMatchingPass(e.target.value)}
                                             />
                                         </div>
-                                        <button type="submit" className="btn btn-primary mt-2 mt-md-3 mt-lg-4">
+                                        <button onClick={register} type="submit" className="btn btn-primary mt-2 mt-md-3 mt-lg-4">
                                             Register
                                         </button>
                                     </form>

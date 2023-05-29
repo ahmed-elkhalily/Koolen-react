@@ -76,12 +76,9 @@ function Layout(props) {
                 <title>{theme.name}</title>
                 <meta name="description" content={theme.fullName} />
             </Helmet>
-
-            <ToastContainer autoClose={5000} hideProgressBar />
-
             <Quickview />
-
             <MobileMenu />
+            <ToastContainer />
 
             <div className="site">
                 <header className="site__header d-lg-none">
