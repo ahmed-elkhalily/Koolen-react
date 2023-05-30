@@ -1,5 +1,6 @@
 // react
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 
 // third-party
 import { Helmet } from 'react-helmet-async';
@@ -13,8 +14,12 @@ import theme from '../../data/theme';
 
 // apis
 import { loginUser, signUpUser } from '../../api/auth';
+// store
+import { LOGIN } from '../../store/auth/auth.types';
+import { toastError, toastSuccess } from '../toast/toastComponent';
 
-export default function AccountPageLogin() {
+function AccountPageLogin(props) {
+    // props
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [regEmail, setRegEmail] = useState('');
@@ -22,21 +27,46 @@ export default function AccountPageLogin() {
     const [regphone, setRegPhone] = useState('');
     const [regPass, setRegPass] = useState('');
     const [regMatchingPass, setRegMatchingPass] = useState('');
+    const { dispatch } = props;
 
     const breadcrumb = [
         { title: 'Home', url: '/' },
         { title: 'My Account', url: '' },
     ];
 
+    function resetData() {
+        setRegEmail('');
+        setRegName('');
+        setRegPhone('');
+        setRegPass('');
+        setRegMatchingPass('');
+    }
+
     function submitLogin(e) {
         e.preventDefault();
-        loginUser({ email, password }, (success) => console.log(success, 'login success'), (fail) => { console.log(fail, 'fial'); });
+        loginUser({ email, password }, (success) => {
+            if (success.success) {
+                const { access_token: token, user } = success;
+                dispatch({ type: LOGIN, payload: { token, user } });
+            } else {
+                toastError(success);
+            }
+        }, (fail) => {
+            toastError(fail);
+        });
     }
+
     function register(e) {
         e.preventDefault();
         signUpUser({
             name: regName, email: regEmail, password: regPass, phone: regphone,
-        }, (success) => console.log(success), (fail) => console.log(fail));
+        }, (success) => {
+            if (success.success) toastSuccess(success);
+            resetData();
+        },
+        (fail) => {
+            toastError(fail);
+        });
     }
 
     return (
@@ -162,3 +192,11 @@ export default function AccountPageLogin() {
         </React.Fragment>
     );
 }
+
+function mapStateToProps(state) {
+    console.log('state: ', state);
+    return {
+        auth: state,
+    };
+}
+export default connect(mapStateToProps)(AccountPageLogin);

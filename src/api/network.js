@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const baseUrl = 'https://masterchefeg.com/dashboard/public';
+export const baseUrl = 'http://koolen.shaha.com.sa';
 
 let token = null;
 let currentLang = 'en';

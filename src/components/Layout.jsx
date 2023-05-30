@@ -1,5 +1,6 @@
 // react
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 
 // third-party
 import PropTypes from 'prop-types';
@@ -39,6 +40,9 @@ import SitePageTypography from './site/SitePageTypography';
 // data stubs
 import theme from '../data/theme';
 
+// apis
+import { getToken } from '../api/network';
+
 const categoryLayouts = [
     ['/shop/category-grid-3-columns-sidebar', { columns: 3, viewMode: 'grid', sidebarPosition: 'start' }],
     ['/shop/category-grid-4-columns-full', { columns: 4, viewMode: 'grid' }],
@@ -68,7 +72,15 @@ const productLayouts = [
 ));
 
 function Layout(props) {
-    const { match, headerLayout, homeComponent } = props;
+    const {
+        match, headerLayout, homeComponent, auth,
+    } = props;
+
+    useEffect(() => {
+        if (auth?.token) {
+            getToken(auth?.token);
+        }
+    }, [auth]);
 
     return (
         <React.Fragment>
@@ -194,7 +206,16 @@ function Layout(props) {
                         {/*
                         // Account
                         */}
-                        <Route exact path="/account/login" component={AccountPageLogin} />
+                        {
+                            <Route
+                                exact
+                                path="/account/login"
+                                render={() => {
+                                    if (!auth?.token) return <AccountPageLogin />;
+                                    return <Redirect to="/" />;
+                                }}
+                            />
+                        }
                         <Route path="/account" component={AccountLayout} />
 
                         {/*
@@ -241,4 +262,10 @@ Layout.defaultProps = {
     headerLayout: 'default',
 };
 
-export default Layout;
+function mapStateToProps(state) {
+    return {
+        auth: state.auth,
+    };
+}
+
+export default connect(mapStateToProps)(Layout);

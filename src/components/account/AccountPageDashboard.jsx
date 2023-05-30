@@ -1,5 +1,5 @@
-// react
 import React from 'react';
+import { connect } from 'react-redux';
 
 // third-party
 import { Helmet } from 'react-helmet-async';
@@ -10,7 +10,8 @@ import addresses from '../../data/accountAddresses';
 import allOrders from '../../data/accountOrders';
 import theme from '../../data/theme';
 
-export default function AccountPageDashboard() {
+function AccountPageDashboard({ auth }) {
+    const { name, email } = auth?.user;
     const address = addresses[0];
     const orders = allOrders.slice(0, 3).map((order) => (
         <tr key={order.id}>
@@ -35,12 +36,12 @@ export default function AccountPageDashboard() {
             <div className="dashboard__profile card profile-card">
                 <div className="card-body profile-card__body">
                     <div className="profile-card__avatar">
-                        <img src="images/avatars/avatar-3.jpg" alt="" />
+                        <img src="images/avatars/profile-avatar.png" alt="avatar" />
                     </div>
-                    <div className="profile-card__name">Helena Garcia</div>
-                    <div className="profile-card__email">stroyka@example.com</div>
+                    <div className="profile-card__name">{name}</div>
+                    <div className="profile-card__email">{email}</div>
                     <div className="profile-card__edit">
-                        <Link to="profile" className="btn btn-secondary btn-sm">Edit Profile</Link>
+                        <Link to="/account/profile" className="btn btn-secondary btn-sm">Edit Profile</Link>
                     </div>
                 </div>
             </div>
@@ -96,3 +97,7 @@ export default function AccountPageDashboard() {
         </div>
     );
 }
+
+const mapStateToProps = (state) => ({ auth: state.auth });
+
+export default connect(mapStateToProps)(AccountPageDashboard);

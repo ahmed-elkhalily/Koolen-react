@@ -1,7 +1,3 @@
-const AUTH = {
-    LOGIN: 'LOGIN',
-    LOGOUT: 'LOGOUT',
-    EDIT_PROFILE: 'EDIT_PROFILE',
-};
-
-export default AUTH;
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
+export const EDIT_PROFILE = 'EDIT_PROFILE';

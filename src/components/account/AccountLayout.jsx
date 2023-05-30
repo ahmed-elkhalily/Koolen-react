@@ -1,5 +1,6 @@
 // react
 import React from 'react';
+import { connect } from 'react-redux';
 
 // third-party
 import classNames from 'classnames';
@@ -23,8 +24,16 @@ import AccountPageOrders from './AccountPageOrders';
 import AccountPagePassword from './AccountPagePassword';
 import AccountPageProfile from './AccountPageProfile';
 
-export default function AccountLayout(props) {
-    const { match, location } = props;
+// component
+import { toastError } from '../toast/toastComponent';
+
+// store
+import { LOGOUT } from '../../store/auth/auth.types';
+// api
+import { logout } from '../../api/auth';
+
+function AccountLayout(props) {
+    const { match, location, dispatch } = props;
 
     const breadcrumb = [
         { title: 'Home', url: '' },
@@ -39,7 +48,7 @@ export default function AccountLayout(props) {
         { title: 'Addresses', url: 'addresses' },
         { title: 'Edit Address', url: 'addresses/5' },
         { title: 'Password', url: 'password' },
-        { title: 'Logout', url: 'login' },
+        { title: 'Logout', url: 'login', isLogout: true },
     ].map((link) => {
         const url = `${match.url}/${link.url}`;
         const isActive = matchPath(location.pathname, { path: url, exact: true });
@@ -47,10 +56,42 @@ export default function AccountLayout(props) {
             'account-nav__item--active': isActive,
         });
 
+        function logoutUser(e) {
+            e.preventDefault();
+            logout((success) => {
+                if (success.success) {
+                    dispatch({ type: LOGOUT });
+                } else {
+                    toastError(success);
+                }
+            }, (fail) => {
+                toastError(fail);
+
+                dispatch({ type: LOGOUT });
+            });
+        }
+
         return (
-            <li key={link.url} className={classes}>
-                <Link to={url}>{link.title}</Link>
-            </li>
+
+            <React.Fragment>
+                {link.isLogout ? (
+                    <li key={link.url} className={classes}>
+                        <a
+                            href="/"
+                            onClick={logoutUser}
+                        >
+                            {link.title}
+
+                        </a>
+                    </li>
+                ) : (
+                    <li key={link.url} className={classes}>
+                        <Link to={url}>{link.title}</Link>
+                    </li>
+                ) }
+
+            </React.Fragment>
+
         );
     });
 
@@ -85,3 +126,5 @@ export default function AccountLayout(props) {
         </React.Fragment>
     );
 }
+
+export default connect(() => {})(AccountLayout);

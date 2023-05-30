@@ -8,18 +8,21 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Indicator from './Indicator';
 import { Person20Svg } from '../../svg';
+// store
+import { LOGOUT } from '../../store/auth/auth.types';
 
 function IndicatorAccount(props) {
+    const { dispatch } = props;
     function logoutUser() {
-        console.log(props);
+        dispatch({ type: LOGOUT });
     }
 
     const dropdown = (
         <div className="account-menu">
             <Link to="/account/dashboard" className="account-menu__user">
-                {/* <div className="account-menu__user-avatar">
-                    <img src="images/avatars/avatar-3.jpg" alt="" />
-                </div> */}
+                <div className="account-menu__user-avatar">
+                    <img src="images/avatars/profile-avatar.png" alt="avatar" />
+                </div>
                 <div className="account-menu__user-info">
                     <div className="account-menu__user-name">Helena Garcia</div>
                     <div className="account-menu__user-email">stroyka@example.com</div>
@@ -35,11 +38,11 @@ function IndicatorAccount(props) {
             <div className="account-menu__divider" />
             <ul className="account-menu__links">
                 <li>
-                    <li><Link to="/account/">Logout</Link></li>
-                    {/* <Link onClick={logoutUser}>Logout</Link> */}
-                    {/* <button onKeyDown={logoutUser} onClick={logoutUser}>
-                        Logout
-                    </button> */}
+                    <li>
+                        <Link to="/account/login" onClick={logoutUser} onKeyDown={logoutUser}>
+                            Logout
+                        </Link>
+                    </li>
                 </li>
             </ul>
         </div>

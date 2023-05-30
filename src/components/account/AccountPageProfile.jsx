@@ -1,5 +1,6 @@
 // react
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 
 // third-party
 import { Helmet } from 'react-helmet-async';
@@ -8,11 +9,12 @@ import { Helmet } from 'react-helmet-async';
 import theme from '../../data/theme';
 
 // apis
-import { getUserInfo, editUserInfo } from '../../api/auth';
-// components
-import { toastError } from '../toast/toastComponent';
+import { editUserInfo } from '../../api/auth';
+import { toastSuccess, toastError } from '../toast/toastComponent';
+// store
+import { EDIT_PROFILE } from '../../store/auth/auth.types';
 
-export default function AccountPageProfile() {
+function AccountPageProfile({ auth, dispatch }) {
     const [user, setUser] = useState({
         fullName: '',
         email: '',
@@ -20,13 +22,8 @@ export default function AccountPageProfile() {
     });
 
     useEffect(() => {
-        getUserInfo((success) => {
-            console.log(success);
-        }, (fail) => {
-            if (fail?.data?.message) {
-                toastError(fail.data.message);
-            }
-        });
+        const { user: { name, email, phone } } = auth;
+        setUser({ fullName: name, email, phone });
     }, []);
 
     function onChange(e) {
@@ -38,13 +35,19 @@ export default function AccountPageProfile() {
 
     function submit(e) {
         e.preventDefault();
-        console.log('event: ', user);
         const {
             fullName, email, phone,
         } = user;
         editUserInfo({
             name: fullName, email, phone,
-        }, (success) => { console.log(success); }, (fail) => { console.log(fail, 'fail'); });
+        }, (success) => {
+            if (success.success) {
+                toastSuccess(success);
+                const { user } = success;
+
+                dispatch({ type: EDIT_PROFILE, payload: { user } });
+            } else { toastError(success); }
+        }, (fail) => { toastError(fail); });
     }
 
     return (
@@ -106,3 +109,7 @@ export default function AccountPageProfile() {
         </div>
     );
 }
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+});
+export default connect(mapStateToProps)(AccountPageProfile);

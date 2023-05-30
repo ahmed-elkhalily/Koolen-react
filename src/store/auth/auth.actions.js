@@ -1,6 +1,4 @@
-import AUTH from './auth.types';
-
-const { LOGIN, LOGOUT, EDIT_PROFILE } = AUTH;
+import { EDIT_PROFILE, LOGIN, LOGOUT } from './auth.types';
 
 export function userLogin(userData) {
     return {

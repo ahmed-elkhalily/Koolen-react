@@ -1,5 +1,6 @@
 // react
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 // third-party
 import classNames from 'classnames';
@@ -85,6 +86,7 @@ class Indicator extends Component {
         const { open } = this.state;
         const { url, className, icon } = this.props;
         let { value, dropdown } = this.props;
+        const { auth } = this.props;
         let button;
 
         if (value !== undefined) {
@@ -125,10 +127,25 @@ class Indicator extends Component {
         });
 
         return (
-            <div className={classes} ref={this.setWrapperRef}>
-                {button}
-                {dropdown}
-            </div>
+            <React.Fragment>
+                {
+                auth?.token
+                    ? (
+                        <div className={classes} ref={this.setWrapperRef}>
+                            {button}
+                            {dropdown}
+                        </div>
+                    )
+                    : (
+                        <div className={classes} ref={this.setWrapperRef}>
+                            {button}
+                            {dropdown}
+                        </div>
+                    )
+                }
+
+            </React.Fragment>
+
         );
     }
 }
@@ -147,5 +164,8 @@ Indicator.propTypes = {
     /** callback function that is called when the dropdown is closed */
     onClose: PropTypes.func,
 };
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+});
 
-export default Indicator;
+export default connect(mapStateToProps)(Indicator);

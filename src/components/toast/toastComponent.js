@@ -13,10 +13,12 @@ const toastData = {
     theme,
 };
 
-export function toastSuccess(msg) {
-    toast.success(msg, toastData);
+export function toastSuccess(success) {
+    const { message } = success;
+    if (message) toast.success(message, toastData);
 }
 
-export function toastError(msg) {
-    toast.error(msg, toastData);
+export function toastError(fail) {
+    if (fail.data)toast.error(fail.data.message, toastData);
+    else toast.error('An Error Occured');
 }

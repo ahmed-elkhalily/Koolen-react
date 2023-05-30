@@ -21,10 +21,10 @@ export function signUpUser({
 }
 
 export function createNewPassword({
-    password,
+    password, oldPassword,
 }, onSuccess, onFail) {
     const path = '/api/v1/auth/password/create';
-    const data = { password };
+    const data = { password, oldPassword };
 
     postRequest(path, data, onSuccess, onFail);
 }
@@ -63,5 +63,5 @@ export function editUserInfo({ name, phone, email }, onSuccess, onFail) {
 export function logout(onSuccess, onFail) {
     const path = '/api/v1/logout';
 
-    postRequest(path, onSuccess, onFail);
+    getRequest(path, onSuccess, onFail);
 }

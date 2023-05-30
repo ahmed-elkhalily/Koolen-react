@@ -53,7 +53,11 @@ export default function AccountPageAddresses() {
 
             <Link to="/" className="addresses-list__item addresses-list__item--new">
                 <div className="addresses-list__plus" />
-                <div className="btn btn-secondary btn-sm">Add New</div>
+                <div className="btn btn-secondary btn-sm">
+                    <Link className="stretched-link" to="/account/addresses/add">
+                        Add New
+                    </Link>
+                </div>
             </Link>
             <div className="addresses-list__divider" />
             {addresses}

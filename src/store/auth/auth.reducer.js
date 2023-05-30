@@ -1,11 +1,8 @@
-import AUTH from './auth.types';
-
-const { LOGIN, LOGOUT, EDIT_PROFILE } = AUTH;
+import { LOGIN, LOGOUT, EDIT_PROFILE } from './auth.types';
 
 const initState = {
-    name: '',
-    phone: '',
-    email: '',
+    token: '',
+    user: {},
 };
 
 export default function userReducer(state = initState, action) {
