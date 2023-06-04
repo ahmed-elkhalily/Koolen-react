@@ -17,6 +17,7 @@ import { loginUser, signUpUser } from '../../api/auth';
 // store
 import { LOGIN } from '../../store/auth/auth.types';
 import { toastError, toastSuccess } from '../toast/toastComponent';
+import { getToken } from '../../api/network';
 
 function AccountPageLogin(props) {
     // props
@@ -47,6 +48,7 @@ function AccountPageLogin(props) {
         loginUser({ email, password }, (success) => {
             if (success.success) {
                 const { access_token: token, user } = success;
+                getToken(token);
                 dispatch({ type: LOGIN, payload: { token, user } });
             } else {
                 toastError(success);

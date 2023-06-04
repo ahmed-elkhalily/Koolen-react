@@ -1,5 +1,5 @@
 {
-  "topbar.aboutUs": "About Us",
+  "topbar.aboutUs": "New One",
   "topbar.contacts": "Contacts",
   "topbar.storeLocation": "Store Location",
   "topbar.trackOrder": "Track Order",
@@ -9,5 +9,7 @@
   "topbar.language": "Language",
 
   "header.phoneLabel": "Customer Service",
-  "header.phone": "(800) 060-0730"
+  "header.phone": "(800) 060-0730", 
+  "changePassword": "تغيير الرقم السري"
+  
 }

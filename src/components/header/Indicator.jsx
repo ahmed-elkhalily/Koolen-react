@@ -51,9 +51,9 @@ class Indicator extends Component {
     };
 
     handleButtonClick = (event) => {
-        const { onClick, dropdown } = this.props;
+        const { onClick, dropdown, isAccount } = this.props;
 
-        if (dropdown) {
+        if (dropdown && !isAccount) {
             event.preventDefault();
         }
 
@@ -86,9 +86,7 @@ class Indicator extends Component {
         const { open } = this.state;
         const { url, className, icon } = this.props;
         let { value, dropdown } = this.props;
-        const { auth } = this.props;
         let button;
-
         if (value !== undefined) {
             value = <span className="indicator__value">{value}</span>;
         }
@@ -98,6 +96,7 @@ class Indicator extends Component {
                 {icon}
                 {value}
             </span>
+
         );
 
         if (url) {
@@ -111,6 +110,7 @@ class Indicator extends Component {
                 <button type="button" className="indicator__button" onClick={this.handleButtonClick}>
                     {title}
                 </button>
+
             );
         }
 
@@ -128,21 +128,10 @@ class Indicator extends Component {
 
         return (
             <React.Fragment>
-                {
-                auth?.token
-                    ? (
-                        <div className={classes} ref={this.setWrapperRef}>
-                            {button}
-                            {dropdown}
-                        </div>
-                    )
-                    : (
-                        <div className={classes} ref={this.setWrapperRef}>
-                            {button}
-                            {dropdown}
-                        </div>
-                    )
-                }
+                <div className={classes} ref={this.setWrapperRef}>
+                    {button}
+                    {dropdown}
+                </div>
 
             </React.Fragment>
 

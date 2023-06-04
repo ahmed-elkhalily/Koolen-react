@@ -9,5 +9,10 @@
   "topbar.language": "Language",
 
   "header.phoneLabel": "Customer Service",
-  "header.phone": "(800) 060-0730"
+  "header.phone": "(800) 060-0730", 
+  "changePassword": "Change Password", 
+  "currentPassword": "Current Password",
+  "newPassword": "New Passwrod",
+  "reenterPass": "Reenter New Password"
+
 }

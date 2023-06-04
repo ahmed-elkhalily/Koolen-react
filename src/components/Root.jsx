@@ -22,9 +22,11 @@ import { localeChange } from '../store/locale';
 import Layout from './Layout';
 import HomePageOne from './home/HomePageOne';
 import HomePageTwo from './home/HomePageTwo';
+import { getToken } from '../api/network';
 
 class Root extends Component {
     componentDidMount() {
+        if (this?.props?.auth.token) { getToken(this?.props?.auth?.token); }
         // preloader
         setTimeout(() => {
             const preloader = document.querySelector('.site-preloader');
@@ -90,6 +92,7 @@ Root.propTypes = {
 
 const mapStateToProps = (state) => ({
     locale: state.locale,
+    auth: state.auth,
 });
 
 const mapDispatchToProps = {

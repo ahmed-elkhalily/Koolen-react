@@ -46,7 +46,7 @@ function AccountLayout(props) {
         { title: 'Order History', url: 'orders' },
         { title: 'Order Details', url: 'orders/5' },
         { title: 'Addresses', url: 'addresses' },
-        { title: 'Edit Address', url: 'addresses/5' },
+        { title: 'Add Address', url: 'addresses/add' },
         { title: 'Password', url: 'password' },
         { title: 'Logout', url: 'login', isLogout: true },
     ].map((link) => {
@@ -66,7 +66,6 @@ function AccountLayout(props) {
                 }
             }, (fail) => {
                 toastError(fail);
-
                 dispatch({ type: LOGOUT });
             });
         }
@@ -127,4 +126,4 @@ function AccountLayout(props) {
     );
 }
 
-export default connect(() => {})(AccountLayout);
+export default connect(() => ({}))(AccountLayout);

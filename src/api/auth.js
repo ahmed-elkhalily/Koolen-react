@@ -20,15 +20,6 @@ export function signUpUser({
     postRequest(path, data, onSuccess, onFail);
 }
 
-export function createNewPassword({
-    password, oldPassword,
-}, onSuccess, onFail) {
-    const path = '/api/v1/auth/password/create';
-    const data = { password, oldPassword };
-
-    postRequest(path, data, onSuccess, onFail);
-}
-
 export function resetPassword({
     code,
     email,
@@ -53,10 +44,8 @@ export function getUserInfo(onSuccess, onFail) {
     getRequest(path, onSuccess, onFail);
 }
 
-export function editUserInfo({ name, phone, email }, onSuccess, onFail) {
+export function editUserInfo(data, onSuccess, onFail) {
     const path = '/api/v1/user/info/update';
-    const data = { name, phone, email };
-
     postRequest(path, data, onSuccess, onFail);
 }
 

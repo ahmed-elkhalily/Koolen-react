@@ -30,7 +30,9 @@ function Topbar() {
 
     const linksList = links.map((item, index) => (
         <div key={index} className="topbar__item topbar__item--link">
-            <Link className="topbar-link" to={item.url}>{item.title}</Link>
+            <Link className="topbar-link" to={item.url}>
+                {item.title}
+            </Link>
         </div>
     ));
 

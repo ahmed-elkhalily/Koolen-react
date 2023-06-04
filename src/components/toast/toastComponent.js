@@ -19,6 +19,7 @@ export function toastSuccess(success) {
 }
 
 export function toastError(fail) {
-    if (fail.data)toast.error(fail.data.message, toastData);
-    else toast.error('An Error Occured');
+    if (fail?.data)toast.error(fail?.data?.message, toastData);
+    else if (fail?.message)toast.error(fail.message, toastData);
+    else toast.error('An Error Occured', toastData);
 }

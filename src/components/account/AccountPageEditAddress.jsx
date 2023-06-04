@@ -1,5 +1,6 @@
 // react
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 // third-party
 import { Helmet } from 'react-helmet-async';
@@ -8,27 +9,131 @@ import { Helmet } from 'react-helmet-async';
 import theme from '../../data/theme';
 
 // apis
+import {
+    getCountry, getStates, getCities, addNewAddress,
+    editAddress,
+    getAddressById,
+} from '../../api/addresses';
 
-export default function AccountPageEditAddress() {
-    const [address, setAddress] = useState({
-        country: '',
-        city: '',
-        postcode: '',
-        address: '',
-    });
+// components
+import { toastError, toastSuccess } from '../toast/toastComponent';
+import BlockLoader from '../blocks/BlockLoader';
 
-    // const [countries, setCountries] = useState([]);
+export default function AccountPageEditAddress(props) {
+    const [address, setAddress] = useState('');
+    const [countries, setCountries] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [states, setStates] = useState([]);
+    const [selectedState, setSelectedState] = useState(null);
+    const [cities, setCities] = useState([]);
+    const [selectedCity, setSelectedCity] = useState(null);
+    const [postalCode, setPostalCode] = useState('');
+    const [phone, setPhone] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const history = useHistory();
 
-    // useEffect(() => {
+    // routes
+    const { match: { params: { addressId } } } = props;
+    const isAddAddress = addressId === 'add';
 
-    // }, []);
+    useEffect(() => {
+        if (!isAddAddress) {
+            setIsLoading(true);
+            getAddressById(addressId, (success) => {
+                setIsLoading(false);
+                if (success.success) {
+                    const {
+                        address: yourAddress, country_id: countryId, city_id: cityId, state_id: stateId, phone, postal_code: postalCode,
+                    } = success.data[0];
+                    setAddress(yourAddress);
+                    setSelectedCountry(countryId);
+                    setSelectedCity(cityId);
+                    setSelectedState(stateId);
+                    setPhone(phone);
+                    setPostalCode(postalCode);
+                } else {
+                    toastError(success);
+                }
+            }, (fail) => {
+                setIsLoading(false);
+                toastError(fail);
+            });
+        }
+    }, [isAddAddress]);
 
-    function onChangeAddress(e) {
-        setAddress((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }));
+    useEffect(() => {
+        getCountry((success) => {
+            if (success.success) {
+                setCountries(success.data);
+                if (isAddAddress) setSelectedCountry(success.data[0].id);
+            } else toastError(success);
+        }, (fail) => toastError(fail));
+    }, []);
+
+    useEffect(() => {
+        if (selectedCountry) {
+            getStates(selectedCountry, (success) => {
+                if (success.success) {
+                    setStates(success.data);
+                    if (isAddAddress) setSelectedState(success.data[0].id);
+                } else toastError(success);
+            }, (fail) => toastError(fail));
+        } else {
+            setStates([]);
+            setSelectedState(null);
+        }
+    }, [selectedCountry]);
+
+    useEffect(() => {
+        if (selectedState) {
+            getCities(selectedState, (success) => {
+                if (success.success) {
+                    setCities(success.data);
+                    if (isAddAddress) setSelectedCity(success.data[0].id);
+                } else toastError(success);
+            }, (fail) => toastError(fail));
+        } else {
+            setCities([]);
+            setSelectedCity(null);
+        }
+    }, [selectedState]);
+
+    function submitNewAddress() {
+        const payload = {
+            address,
+            country: +selectedCountry,
+            state: +selectedState,
+            city: +selectedCity,
+            postalCode: +postalCode,
+            phone,
+        };
+        if (isAddAddress) {
+            addNewAddress(payload, (success) => {
+                if (success.success) {
+                    history.push('/account/addresses');
+                    toastSuccess(success);
+                } else {
+                    toastError(success);
+                }
+            }, (fail) => {
+                toastError(fail);
+            });
+        } else {
+            payload.id = +addressId;
+            editAddress(payload, (success) => {
+                if (success.success) {
+                    history.push('/account/addresses');
+                    toastSuccess(success);
+                } else {
+                    toastError(success);
+                }
+            }, (fail) => {
+                toastError(fail);
+            });
+        }
     }
+
+    if (isLoading) return <BlockLoader />;
 
     return (
 
@@ -38,101 +143,82 @@ export default function AccountPageEditAddress() {
             </Helmet>
 
             <div className="card-header">
-                <h5>Edit Address</h5>
+                {
+                    addressId === 'add'
+                        ? <h5>Add Address</h5>
+                        : <h5>Edit Address</h5>
+                }
             </div>
             <div className="card-divider" />
             <div className="card-body">
                 <div className="row no-gutters">
                     <div className="col-12 col-lg-10 col-xl-8">
-                        <div className="form-row">
-                            <div className="form-group col-md-6">
-                                <label htmlFor="checkout-first-name">First Name</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="checkout-first-name"
-                                    name="firstName"
-                                    value={address.firstname}
-                                    onChange={onChangeAddress}
-                                    placeholder="First Name"
-                                />
-                            </div>
-                            <div className="form-group col-md-6">
-                                <label htmlFor="checkout-last-name">Last Name</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="checkout-last-name"
-                                    name="lastName"
-                                    placeholder="Last Name"
-                                    value={address.lastName}
-                                    onChange={onChangeAddress}
-                                />
-                            </div>
-                        </div>
-
                         <div className="form-group">
-                            <label htmlFor="checkout-company-name">
-                                Company Name
-                                {' '}
-                                <span className="text-muted">(Optional)</span>
-                            </label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="checkout-company-name"
-                                placeholder="Company Name"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="checkout-country">Country</label>
-                            <select id="checkout-country" className="form-control form-control-select2">
-                                <option>Select a country...</option>
-                                <option>United States</option>
-                                <option>Russia</option>
-                                <option>Italy</option>
-                                <option>France</option>
-                                <option>Ukraine</option>
-                                <option>Germany</option>
-                                <option>Australia</option>
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="checkout-street-address">Street Address</label>
+                            <label htmlFor="checkout-street-address">Address</label>
                             <input
                                 type="text"
                                 className="form-control"
                                 id="checkout-street-address"
                                 placeholder="Street Address"
+                                name="address"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                autoComplete="off"
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="checkout-address">
-                                Apartment, suite, unit etc.
-                                {' '}
-                                <span className="text-muted">(Optional)</span>
-                            </label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="checkout-address"
-                            />
+                            <label htmlFor="checkout-country">Country</label>
+                            <select
+                                autoComplete="off"
+                                id="checkout-country"
+                                vlaue={null}
+                                onChange={(e) => setSelectedCountry(e.target.value)}
+                                className="form-control form-control-select2"
+                            >
+                                {
+                                    [...countries].map(({ id, name }) => (
+                                        <option key={id} value={id}>
+                                            {name}
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="checkout-state">State</label>
+                            <select
+                                autoComplete="off"
+                                id="checkout-country"
+                                vlaue={selectedState}
+                                onChange={(e) => setSelectedState(e.target.value)}
+                                className="form-control form-control-select2"
+                            >
+                                {
+                                    states.map(({ id, name }) => (
+                                        <option key={id} value={id}>
+                                            {name}
+                                        </option>
+                                    ))
+                                }
+                            </select>
                         </div>
                         <div className="form-group">
                             <label htmlFor="checkout-city">Town / City</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="checkout-city"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="checkout-state">State / County</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="checkout-state"
-                            />
+                            <select
+                                autoComplete="off"
+                                id="checkout-country"
+                                vlaue={selectedCity}
+                                onChange={(e) => setSelectedCity(e.target.value)}
+                                className="form-control form-control-select2"
+                            >
+                                {
+                                    cities.map(({ id, name }) => (
+                                        <option key={id} value={id}>
+                                            {name}
+                                        </option>
+                                    ))
+                                }
+                            </select>
                         </div>
                         <div className="form-group">
                             <label htmlFor="checkout-postcode">Postcode / ZIP</label>
@@ -140,32 +226,30 @@ export default function AccountPageEditAddress() {
                                 type="text"
                                 className="form-control"
                                 id="checkout-postcode"
+                                name="postalCode"
+                                placeholder="Postcode / ZIP"
+                                value={postalCode}
+                                onChange={(e) => setPostalCode(e.target.value)}
+                                autoComplete="off"
                             />
                         </div>
 
-                        <div className="form-row">
-                            <div className="form-group col-md-6">
-                                <label htmlFor="checkout-email">Email address</label>
-                                <input
-                                    type="email"
-                                    className="form-control"
-                                    id="checkout-email"
-                                    placeholder="Email address"
-                                />
-                            </div>
-                            <div className="form-group col-md-6">
-                                <label htmlFor="checkout-phone">Phone</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="checkout-phone"
-                                    placeholder="Phone"
-                                />
-                            </div>
+                        <div className="form-group ">
+                            <label htmlFor="checkout-phone">Phone</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="checkout-phone"
+                                placeholder="Phone"
+                                name="phone"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                autoComplete="off"
+                            />
                         </div>
 
                         <div className="form-group mt-3 mb-0">
-                            <button className="btn btn-primary" type="button">Save</button>
+                            <button onClick={submitNewAddress} className="btn btn-primary" type="button">Save</button>
                         </div>
                     </div>
                 </div>

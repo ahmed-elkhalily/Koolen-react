@@ -123,7 +123,7 @@ export default [
                 { title: 'Order History', url: '/account/orders' },
                 { title: 'Order Details', url: '/account/orders/5' },
                 { title: 'Address Book', url: '/account/addresses' },
-                { title: 'Edit Address', url: '/account/addresses/5' },
+                { title: 'Add Address', url: '/account/addresses/add' },
                 { title: 'Change Password', url: '/account/password' },
             ],
         },

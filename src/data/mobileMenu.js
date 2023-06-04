@@ -88,7 +88,7 @@ export default [
             { type: 'link', label: 'Order History', url: '/account/orders' },
             { type: 'link', label: 'Order Details', url: '/account/orders/5' },
             { type: 'link', label: 'Address Book', url: '/account/addresses' },
-            { type: 'link', label: 'Edit Address', url: '/account/addresses/5' },
+            { type: 'link', label: 'Add Address', url: '/account/addresses/add' },
             { type: 'link', label: 'Change Password', url: '/account/password' },
         ],
     },

@@ -1,26 +1,44 @@
 // react
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 
 // third-party
 import { Helmet } from 'react-helmet-async';
+import { FormattedMessage } from 'react-intl';
 
 // data stubs
 import theme from '../../data/theme';
 
 // api
+import { editUserInfo } from '../../api/auth';
+import { toastSuccess, toastError } from '../toast/toastComponent';
 
-export default function AccountPagePassword() {
+function AccountPagePassword({ auth }) {
     const [password, setPassword] = useState({
-        current: '',
         new: '',
         reenter: '',
     });
+    const { name, email, phone } = auth.user;
 
     function onChange(e) {
         setPassword((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
         }));
+    }
+
+    function createPass() {
+        const payload = {
+            name, email, phone, password: password.new, confirmPassword: password.reenter,
+        };
+        console.log(payload);
+        editUserInfo(payload, (success) => {
+            if (success.success) {
+                toastSuccess(success);
+            } else {
+                toastError(success);
+            }
+        }, (fail) => toastError(fail));
     }
 
     return (
@@ -30,24 +48,12 @@ export default function AccountPagePassword() {
             </Helmet>
 
             <div className="card-header">
-                <h5>Change Password</h5>
+                <h5><FormattedMessage id="changePassword" defaultMessage="Change Password" /></h5>
             </div>
             <div className="card-divider" />
             <div className="card-body">
                 <div className="row no-gutters">
                     <div className="col-12 col-lg-7 col-xl-6">
-                        <div className="form-group">
-                            <label htmlFor="password-current">Current Password</label>
-                            <input
-                                type="password"
-                                name="current"
-                                className="form-control"
-                                id="password-current"
-                                placeholder="Current Password"
-                                value={password.current}
-                                onChange={onChange}
-                            />
-                        </div>
                         <div className="form-group">
                             <label htmlFor="password-new">New Password</label>
                             <input
@@ -61,7 +67,7 @@ export default function AccountPagePassword() {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="password-confirm">Reenter New Password</label>
+                            <label htmlFor="password-confirm">Re-Enter New Password</label>
                             <input
                                 type="password"
                                 name="reenter"
@@ -72,9 +78,8 @@ export default function AccountPagePassword() {
                                 onChange={onChange}
                             />
                         </div>
-
                         <div className="form-group mt-5 mb-0">
-                            <button type="button" className="btn btn-primary">Change</button>
+                            <button onClick={createPass} type="button" className="btn btn-primary">Change</button>
                         </div>
                     </div>
                 </div>
@@ -82,3 +87,7 @@ export default function AccountPagePassword() {
         </div>
     );
 }
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+});
+export default connect(mapStateToProps)(AccountPagePassword);
