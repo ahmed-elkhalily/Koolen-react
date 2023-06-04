@@ -113,7 +113,7 @@ function HomePageOne() {
             {useMemo(() => (
                 <BlockCategories
                     title="Popular Categories"
-                    layout="classic"
+                    layout="compact"// compact
                     categories={categories}
                 />
             ), [])}

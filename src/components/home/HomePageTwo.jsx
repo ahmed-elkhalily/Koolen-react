@@ -114,7 +114,7 @@ function HomePageTwo() {
             {useMemo(() => (
                 <BlockCategories
                     title="Popular Categories"
-                    layout="compact"
+                    layout="compact" // classic
                     categories={categories}
                 />
             ), [])}
