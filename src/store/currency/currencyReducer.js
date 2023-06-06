@@ -1,9 +1,9 @@
 import { CURRENCY_CHANGE } from './currencyActionTypes';
 
 const initialState = {
-    code: 'USD',
-    symbol: '$',
-    name: 'US Dollar',
+    code: 'SAR',
+    symbol: 'SAR',
+    name: 'Saudi Arabian Riyals',
 };
 
 export default function currencyReducer(state = initialState, action) {

@@ -33,5 +33,6 @@ module.exports = {
         'react/jsx-props-no-spreading': [0],
         'react/jsx-fragments': ['error', 'element'],
         'max-len': [0],
+        camelcase: ['off', { prGperties: 'never' }],
     },
 };

@@ -127,10 +127,7 @@ export default [
         type: 'button',
         label: 'Currency',
         children: [
-            { type: 'button', label: '€ Euro', data: { type: 'currency', code: 'EUR' } },
-            { type: 'button', label: '£ Pound Sterling', data: { type: 'currency', code: 'GBP' } },
-            { type: 'button', label: '$ US Dollar', data: { type: 'currency', code: 'USD' } },
-            { type: 'button', label: '₽ Russian Ruble', data: { type: 'currency', code: 'RUB' } },
+            { type: 'button', label: 'SAR Saudi Arabian Riyals', data: { type: 'currency', code: 'SAR' } },
         ],
     },
 

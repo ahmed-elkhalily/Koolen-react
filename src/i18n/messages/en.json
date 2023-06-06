@@ -13,6 +13,30 @@
   "changePassword": "Change Password", 
   "currentPassword": "Current Password",
   "newPassword": "New Passwrod",
-  "reenterPass": "Reenter New Password"
+  "reenterPass": "Reenter New Password",
+  "home": "Home",
+  "myAccount": "My Account",
 
+  "navigation": "Navigation",
+  "editProfile": "Edit Profile",
+  "fullName": "FullName",
+  "email": "Email Address",
+  "phoneNumber": "Phone Number",
+  "dashboard": "Dashboard",
+  "password": "Password",
+  "logout": "Logout",
+
+  "save": "Save",
+  "edit": "Edit",
+  "addNew": "Add New",
+  "remove": "Remove",
+
+  "postalCode": "Postal Code",
+  "country": "Country",
+  "city": "City",
+  "townCity": "Town / City",
+  "postCodeZip": "Postcode / Zip",
+  "phone": "Phone ",
+  "state": "State",
+  "default": "DEFAULT ADDRESS"
 }

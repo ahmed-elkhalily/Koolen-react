@@ -6,37 +6,39 @@ import { Helmet } from 'react-helmet-async';
 
 // application
 import shopApi from '../../api/shop';
-import { useDeferredData, useProductColumns, useProductTabs } from '../../services/hooks';
+
+import { useDeferredData } from '../../services/hooks';
+// , useProductColumns, useProductTabs
 
 // blocks
-import BlockBanner from '../blocks/BlockBanner';
-import BlockBrands from '../blocks/BlockBrands';
-import BlockCategories from '../blocks/BlockCategories';
-import BlockFeatures from '../blocks/BlockFeatures';
-import BlockPosts from '../blocks/BlockPosts';
-import BlockProductColumns from '../blocks/BlockProductColumns';
+// import BlockBanner from '../blocks/BlockBanner';
+// import BlockBrands from '../blocks/BlockBrands';
+// import BlockCategories from '../blocks/BlockCategories';
+// import BlockFeatures from '../blocks/BlockFeatures';
+// import BlockPosts from '../blocks/BlockPosts';
+// import BlockProductColumns from '../blocks/BlockProductColumns';
 import BlockProducts from '../blocks/BlockProducts';
-import BlockProductsCarousel from '../blocks/BlockProductsCarousel';
-import BlockSlideShow from '../blocks/BlockSlideShow';
+// import BlockProductsCarousel from '../blocks/BlockProductsCarousel';
+// import BlockSlideShow from '../blocks/BlockSlideShow';
 
 // data stubs
-import categories from '../../data/shopBlockCategories';
-import posts from '../../data/blogPosts';
+// import categories from '../../data/shopBlockCategories';
+// import posts from '../../data/blogPosts';
 import theme from '../../data/theme';
 
 function HomePageOne() {
     /**
      * Featured products.
      */
-    const featuredProducts = useProductTabs(
-        useMemo(() => [
-            { id: 1, name: 'All', categorySlug: undefined },
-            { id: 2, name: 'Power Tools', categorySlug: 'power-tools' },
-            { id: 3, name: 'Hand Tools', categorySlug: 'hand-tools' },
-            { id: 4, name: 'Plumbing', categorySlug: 'plumbing' },
-        ], []),
-        (tab) => shopApi.getPopularProducts({ limit: 8, category: tab.categorySlug }),
-    );
+    // const featuredProducts = useProductTabs(
+    //     useMemo(() => [
+    //         { id: 1, name: 'All', categorySlug: undefined },
+    //         { id: 2, name: 'Power Tools', categorySlug: 'power-tools' },
+    //         { id: 3, name: 'Hand Tools', categorySlug: 'hand-tools' },
+    //         { id: 4, name: 'Plumbing', categorySlug: 'plumbing' },
+    //     ], []),
+    //     (tab) => shopApi.getPopularProducts({ limit: 8, category: tab.categorySlug }),
+    // );
 
     /**
      * Bestsellers.
@@ -48,35 +50,35 @@ function HomePageOne() {
     /**
      * Latest products.
      */
-    const latestProducts = useProductTabs(
-        useMemo(() => [
-            { id: 1, name: 'All', categorySlug: undefined },
-            { id: 2, name: 'Power Tools', categorySlug: 'power-tools' },
-            { id: 3, name: 'Hand Tools', categorySlug: 'hand-tools' },
-            { id: 4, name: 'Plumbing', categorySlug: 'plumbing' },
-        ], []),
-        (tab) => shopApi.getLatestProducts({ limit: 8, category: tab.categorySlug }),
-    );
+    // const latestProducts = useProductTabs(
+    //     useMemo(() => [
+    //         { id: 1, name: 'All', categorySlug: undefined },
+    //         { id: 2, name: 'Power Tools', categorySlug: 'power-tools' },
+    //         { id: 3, name: 'Hand Tools', categorySlug: 'hand-tools' },
+    //         { id: 4, name: 'Plumbing', categorySlug: 'plumbing' },
+    //     ], []),
+    //     (tab) => shopApi.getLatestProducts({ limit: 8, category: tab.categorySlug }),
+    // );
 
     /**
      * Product columns.
      */
-    const columns = useProductColumns(
-        useMemo(() => [
-            {
-                title: 'Top Rated Products',
-                source: () => shopApi.getTopRatedProducts({ limit: 3 }),
-            },
-            {
-                title: 'Special Offers',
-                source: () => shopApi.getDiscountedProducts({ limit: 3 }),
-            },
-            {
-                title: 'Bestsellers',
-                source: () => shopApi.getPopularProducts({ limit: 3 }),
-            },
-        ], []),
-    );
+    // const columns = useProductColumns(
+    //     useMemo(() => [
+    //         {
+    //             title: 'Top Rated Products',
+    //             source: () => shopApi.getTopRatedProducts({ limit: 3 }),
+    //         },
+    //         {
+    //             title: 'Special Offers',
+    //             source: () => shopApi.getDiscountedProducts({ limit: 3 }),
+    //         },
+    //         {
+    //             title: 'Bestsellers',
+    //             source: () => shopApi.getPopularProducts({ limit: 3 }),
+    //         },
+    //     ], []),
+    // );
 
     return (
         <React.Fragment>
@@ -84,11 +86,11 @@ function HomePageOne() {
                 <title>{`Home Page One — ${theme.name}`}</title>
             </Helmet>
 
-            {useMemo(() => <BlockSlideShow withDepartments />, [])}
+            {/* {useMemo(() => <BlockSlideShow withDepartments />, [])} */}
 
-            {useMemo(() => <BlockFeatures />, [])}
+            {/* {useMemo(() => <BlockFeatures />, [])} */}
 
-            {useMemo(() => (
+            {/* {useMemo(() => (
                 <BlockProductsCarousel
                     title="Featured Products"
                     layout="grid-4"
@@ -97,9 +99,9 @@ function HomePageOne() {
                     groups={featuredProducts.tabs}
                     onGroupClick={featuredProducts.handleTabChange}
                 />
-            ), [featuredProducts])}
+            ), [featuredProducts])} */}
 
-            {useMemo(() => <BlockBanner />, [])}
+            {/* {useMemo(() => <BlockBanner />, [])} */}
 
             {useMemo(() => (
                 <BlockProducts
@@ -110,15 +112,15 @@ function HomePageOne() {
                 />
             ), [bestsellers.data])}
 
-            {useMemo(() => (
+            {/* {useMemo(() => (
                 <BlockCategories
                     title="Popular Categories"
                     layout="compact"// compact
                     categories={categories}
                 />
-            ), [])}
+            ), [])} */}
 
-            {useMemo(() => (
+            {/* {useMemo(() => (
                 <BlockProductsCarousel
                     title="New Arrivals"
                     layout="horizontal"
@@ -128,13 +130,13 @@ function HomePageOne() {
                     groups={latestProducts.tabs}
                     onGroupClick={latestProducts.handleTabChange}
                 />
-            ), [latestProducts])}
+            ), [latestProducts])} */}
 
-            {useMemo(() => <BlockPosts title="Latest News" layout="list-sm" posts={posts} />, [])}
+            {/* {useMemo(() => <BlockPosts title="Latest News" layout="list-sm" posts={posts} />, [])} */}
 
-            {useMemo(() => <BlockBrands />, [])}
+            {/* {useMemo(() => <BlockBrands />, [])} */}
 
-            {useMemo(() => <BlockProductColumns columns={columns} />, [columns])}
+            {/* {useMemo(() => <BlockProductColumns columns={columns} />, [columns])} */}
         </React.Fragment>
     );
 }

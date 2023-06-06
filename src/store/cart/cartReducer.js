@@ -173,6 +173,7 @@ const initialState = {
 };
 
 export default function cartReducer(state = initialState, action) {
+    console.log('item, product, options', action);
     switch (action.type) {
     case CART_ADD_ITEM:
         return addItem(state, action.product, action.options, action.quantity);

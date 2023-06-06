@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const baseUrl = 'http://koolen.shaha.com.sa';
+let baseUrl = 'http://koolen.shaha.com.sa';
 
 let token = null;
 let currentLang = 'en';
@@ -13,9 +13,10 @@ export function getCurrentLanguage(lang) {
     currentLang = lang;
 }
 
-function reqHeader(method, path, data, reqAuth, multiPart) {
+function reqHeader(method, path, data, reqAuth, multiPart, newPath = false) {
     if (path[0] === '/') path.slice(1);
 
+    if (newPath) baseUrl = 'https://shaha.com.sa';
     const reqData = {
         method,
         url: baseUrl + path,
@@ -47,27 +48,27 @@ function reqHeader(method, path, data, reqAuth, multiPart) {
     return reqData;
 }
 
-export function getRequest(path, onSuccess, onFail, reqAuth = true) {
-    const reqData = reqHeader('get', path, null, reqAuth);
+export function getRequest(path, onSuccess, onFail, newPath = false, reqAuth = true) {
+    const reqData = reqHeader('get', path, null, reqAuth, false, newPath);
     axios(reqData).then((res) => onSuccess(res.data)).catch((fail) => onFail(fail.response));
 }
 
-export function postRequest(path, data, onSuccess, onFail, reqAuth = true) {
-    const reqData = reqHeader('post', path, data, reqAuth);
+export function postRequest(path, data, onSuccess, onFail, newPath = false, reqAuth = true) {
+    const reqData = reqHeader('post', path, data, reqAuth, false, newPath);
     axios(reqData).then((res) => onSuccess(res.data)).catch((fail) => onFail(fail.response));
 }
 
-export function patchRequest(path, data, onSuccess, onFail, reqAuth = true) {
-    const reqData = reqHeader('patch', path, data, reqAuth);
+export function patchRequest(path, data, onSuccess, onFail, newPath = false, reqAuth = true) {
+    const reqData = reqHeader('patch', path, data, reqAuth, false, newPath);
     axios(reqData).then((res) => onSuccess(res.data)).catch((fail) => onFail(fail.response));
 }
 
-export function putRequest(path, data, onSuccess, onFail, reqAuth = true) {
-    const reqData = reqHeader('put', path, data, reqAuth);
+export function putRequest(path, data, onSuccess, onFail, newPath = false, reqAuth = true) {
+    const reqData = reqHeader('put', path, data, reqAuth, newPath);
     axios(reqData).then((res) => onSuccess(res.data)).catch((fail) => onFail(fail.response));
 }
 
-export function deleteRequest(path, data, onSuccess, onFail, reqAuth = true) {
-    const reqData = reqHeader('delete', path, data, reqAuth);
+export function deleteRequest(path, data, onSuccess, onFail, newPath = false, reqAuth = true) {
+    const reqData = reqHeader('delete', path, data, newPath, reqAuth);
     axios(reqData).then((res) => onSuccess(res.data)).catch((fail) => onFail(fail.response));
 }
