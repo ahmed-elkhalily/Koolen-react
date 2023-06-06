@@ -1,4 +1,4 @@
-export default function productSchema(products) {
+export default function productSchema(products, status) {
     // change thumbnail_image to be an array
     // add rating
     const schema = [];
@@ -27,6 +27,9 @@ export default function productSchema(products) {
 
         if (base_price - base_discounted_price > 0) {
             payload.compareAtPrice = base_price;
+        }
+        if (status) {
+            payload.badges = [status];
         }
 
         schema.push(payload);

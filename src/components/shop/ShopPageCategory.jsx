@@ -22,6 +22,9 @@ import { sidebarClose } from '../../store/sidebar';
 import theme from '../../data/theme';
 import { url, getCategoryParents } from '../../services/utils';
 
+// apis
+// import { getNewArrivalProducts } from '../../api/products';
+
 function parseQueryOptions(location) {
     const query = queryString.parse(location);
     const optionValues = {};
@@ -170,6 +173,15 @@ function ShopPageCategory(props) {
     const offcanvas = columns === 3 ? 'mobile' : 'always';
     const [state, dispatch] = useReducer(reducer, initialState, init);
     const [latestProducts, setLatestProducts] = useState([]);
+    // const [allProducts, setAllProducts] = useState([]);
+    // const [isLoading, setIsLoading] = useState(false);
+    // useEffect(() => {
+    //     getNewArrivalProducts(8, success=> {if (success.success){
+
+    //     }else {toastError(success)}}, fail=>{
+    //         toastError(fail)
+    //     })
+    // }, []);
 
     // Replace current url.
     useEffect(() => {

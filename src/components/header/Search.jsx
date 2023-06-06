@@ -11,42 +11,13 @@ import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 
 // application
-import shopApi from '../../api/shop';
 import Suggestions from './Suggestions';
 import { Cross20Svg, Search20Svg } from '../../svg';
 
-function useCategories() {
-    const [categories, setCategories] = useState([]);
-
-    useEffect(() => {
-        let canceled = false;
-
-        const treeToList = (categories, depth = 0) => (
-            categories.reduce(
-                (result, category) => [
-                    ...result,
-                    { depth, ...category },
-                    ...treeToList(category.children || [], depth + 1),
-                ],
-                [],
-            )
-        );
-
-        shopApi.getCategories({ depth: 1 }).then((categories) => {
-            if (canceled) {
-                return;
-            }
-
-            setCategories(treeToList(categories));
-        });
-
-        return () => {
-            canceled = true;
-        };
-    }, [setCategories]);
-
-    return categories;
-}
+// apis,
+import { getSearchedProduct } from '../../api/products';
+import prodcutSchema from '../../helpers/productSchema';
+import { toastError } from '../toast/toastComponent';
 
 function Search(props) {
     const {
@@ -61,14 +32,12 @@ function Search(props) {
     const [hasSuggestions, setHasSuggestions] = useState(false);
     const [suggestedProducts, setSuggestedProducts] = useState([]);
     const [query, setQuery] = useState('');
-    const [category, setCategory] = useState('[all]');
-    const categories = useCategories();
     const wrapper = useRef(null);
+
     const close = useCallback(() => {
         if (onClose) {
             onClose();
         }
-
         setSuggestionsOpen(false);
     }, [onClose]);
 
@@ -95,17 +64,11 @@ function Search(props) {
         setSuggestionsOpen(true);
     };
 
-    const handleChangeCategory = (event) => {
-        setCategory(event.target.value);
-    };
-
     const handleChangeQuery = (event) => {
         let canceled = false;
-        let timer;
 
         const newCancelFn = () => {
             canceled = true;
-            clearTimeout(timer);
         };
 
         const query = event.target.value;
@@ -115,23 +78,32 @@ function Search(props) {
         if (query === '') {
             setHasSuggestions(false);
         } else {
-            timer = setTimeout(() => {
-                const options = { limit: 5 };
+            // timer = setTimeout(() => {
+            //     const options = { limit: 5 };
 
-                if (category !== '[all]') {
-                    options.category = category;
-                }
+            //     shopApi.getSuggestions(query, options).then((products) => {
+            //
 
-                shopApi.getSuggestions(query, options).then((products) => {
+            //         setSuggestedProducts(products);
+            //         setHasSuggestions(products.length > 0);
+            //         setSuggestionsOpen(true);
+            //     });
+            // }, 100);
+            getSearchedProduct(query, (success) => {
+                if (success.success) {
                     if (canceled) {
                         return;
                     }
-
+                    const products = prodcutSchema(success.products.data);
                     setSuggestedProducts(products);
                     setHasSuggestions(products.length > 0);
                     setSuggestionsOpen(true);
-                });
-            }, 100);
+                } else {
+                    setSuggestedProducts([]);
+                    setHasSuggestions(false);
+                    setSuggestionsOpen(false);
+                }
+            }, (fail) => { toastError(fail); });
         }
 
         setCancelFn(() => newCancelFn);
@@ -141,9 +113,7 @@ function Search(props) {
         setTimeout(() => {
             if (!document.activeElement || document.activeElement === document.body) {
                 return;
-            }
-
-            // Close suggestions if the focus received an external element.
+            } // Close suggestions if the focus received an external element.
             if (wrapper.current && !wrapper.current.contains(document.activeElement)) {
                 close();
             }
@@ -169,29 +139,10 @@ function Search(props) {
         </button>
     );
 
-    const categoryOptions = categories.map((category) => (
-        <option key={category.slug} value={category.slug}>
-            {'\u00A0'.repeat(4 * category.depth)}
-            {category.name}
-        </option>
-    ));
-
     return (
         <div className={rootClasses} ref={wrapper} onBlur={handleBlur}>
             <div className="search__body">
                 <form className="search__form" action="">
-                    {context === 'header' && (
-                        <select
-                            className="search__categories"
-                            aria-label="Category"
-                            value={category}
-                            onFocus={close}
-                            onChange={handleChangeCategory}
-                        >
-                            <option value="[all]">All Categories</option>
-                            {categoryOptions}
-                        </select>
-                    )}
                     <input
                         ref={inputRef}
                         onChange={handleChangeQuery}
@@ -200,7 +151,7 @@ function Search(props) {
                         value={query}
                         className="search__input"
                         name="search"
-                        placeholder="Search over 10,000 products"
+                        placeholder="Search ..."
                         aria-label="Site search"
                         type="text"
                         autoComplete="off"
