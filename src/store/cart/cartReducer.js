@@ -41,6 +41,12 @@ function calcTotal(subtotal, extraLines) {
 
 function addItem(state, product, options, quantity) {
     const itemIndex = findItemIndex(state.items, product, options);
+    // let inStock;
+    let item;
+    if (itemIndex !== -1) item = state.items[itemIndex];
+    if (item && item.product.stock - (item.quantity + quantity) <= 0) {
+        return state;
+    }
 
     let newItems;
     let { lastItemId } = state;
@@ -104,6 +110,10 @@ function updateQuantities(state, quantities) {
     const newItems = state.items.map((item) => {
         const quantity = quantities.find((x) => x.itemId === item.id && x.value !== item.quantity);
 
+        if (item.product.stock - quantity.value <= 0) {
+            return item;
+        }
+
         if (!quantity) {
             return item;
         }
@@ -133,25 +143,6 @@ function updateQuantities(state, quantities) {
     return state;
 }
 
-/*
-* item example:
-* {
-*   id: 1,
-*   product: {...}
-*   options: [
-*     {optionId: 1, optionTitle: 'Color', valueId: 1, valueTitle: 'Red'}
-*   ],
-*   price: 250,
-*   quantity: 2,
-*   total: 500
-* }
-* extraLine example:
-* {
-*   type: 'shipping',
-*   title: 'Shipping',
-*   price: 25
-* }
-*/
 const initialState = {
     lastItemId: 0,
     quantity: 0,
@@ -173,7 +164,6 @@ const initialState = {
 };
 
 export default function cartReducer(state = initialState, action) {
-    console.log('item, product, options', action);
     switch (action.type) {
     case CART_ADD_ITEM:
         return addItem(state, action.product, action.options, action.quantity);

@@ -108,7 +108,7 @@ function ProductCard(props) {
             {image}
             <div className="product-card__info">
                 <div className="product-card__name">
-                    <Link to={url.product(product)}>{product.name}</Link>
+                    <Link to={url.product(product)} state={{ product }}>{product.name}</Link>
                 </div>
                 <div className="product-card__rating">
                     <Rating value={product.rating} />

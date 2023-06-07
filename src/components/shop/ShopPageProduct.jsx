@@ -1,16 +1,17 @@
 // react
 import React, { useEffect, useState } from 'react';
+// import { useParams } from 'react-router-dom';
 
 // third-party
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 
 // application
-import PageHeader from '../shared/PageHeader';
+// import PageHeader from '../shared/PageHeader';
 import Product from '../shared/Product';
 import ProductTabs from './ProductTabs';
 import shopApi from '../../api/shop';
-import { url } from '../../services/utils';
+// import { url } from '../../services/utils';
 
 // blocks
 import BlockLoader from '../blocks/BlockLoader';
@@ -23,50 +24,46 @@ import WidgetProducts from '../widgets/WidgetProducts';
 // data stubs
 import categories from '../../data/shopWidgetCategories';
 import theme from '../../data/theme';
+// api
+import { getProductDetails, getRelatedProducts } from '../../api/products';
+import prodcutsSchema, { singleProductSchema } from '../../helpers/productSchema';
+import { toastError } from '../toast/toastComponent';
 
 function ShopPageProduct(props) {
     const { productSlug, layout, sidebarPosition } = props;
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [product, setProduct] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [latestProducts, setLatestProducts] = useState([]);
 
-    // Load product.
     useEffect(() => {
-        let canceled = false;
-
         setIsLoading(true);
-
-        shopApi.getProductBySlug(productSlug).then((product) => {
-            if (canceled) {
-                return;
-            }
-
-            setProduct(product);
+        getProductDetails(productSlug, (success) => {
             setIsLoading(false);
-        });
+            if (success.success) {
+                const product = singleProductSchema(success.data);
+                setProduct(product[0]);
+            } else toastError(success);
+        }, (fail) => {
+            setIsLoading(true);
 
-        return () => {
-            canceled = true;
-        };
-    }, [productSlug, setIsLoading]);
+            toastError(fail);
+        });
+    }, [productSlug]);
 
     // Load related products.
     useEffect(() => {
-        let canceled = false;
-
-        shopApi.getRelatedProducts(productSlug, { limit: 8 }).then((products) => {
-            if (canceled) {
-                return;
-            }
-
-            setRelatedProducts(products);
-        });
-
-        return () => {
-            canceled = true;
-        };
-    }, [productSlug, setRelatedProducts]);
+        if (product) {
+            getRelatedProducts(product.id, (success) => {
+                if (success.success) {
+                    const products = prodcutsSchema(success.data);
+                    setRelatedProducts(products);
+                } else {
+                    toastError(success);
+                }
+            }, (fail) => { toastError(fail); });
+        }
+    }, [productSlug, setRelatedProducts, product]);
 
     // Load latest products.
     useEffect(() => {
@@ -93,13 +90,8 @@ function ShopPageProduct(props) {
         return <BlockLoader />;
     }
 
-    const breadcrumb = [
-        { title: 'Home', url: url.home() },
-        { title: 'Shop', url: url.catalog() },
-        { title: product.name, url: url.product(product) },
-    ];
-
     let content;
+    console.log('product: ', product);
 
     if (layout === 'sidebar') {
         const sidebar = (
@@ -121,7 +113,10 @@ function ShopPageProduct(props) {
                     {sidebarPosition === 'start' && sidebar}
                     <div className=" shop-layout__content">
                         <div className=" block">
-                            <Product product={product} layout={layout} />
+                            {
+                                product
+                                && <Product product={product} layout={layout} />
+                            }
                             <ProductTabs withSidebar />
                         </div>
 
@@ -143,8 +138,11 @@ function ShopPageProduct(props) {
             <React.Fragment>
                 <div className="block">
                     <div className="container">
-                        <Product product={product} layout={layout} />
-                        <ProductTabs />
+                        {
+                            product
+                            && <Product product={product} layout={layout} />
+                        }
+                        <ProductTabs product={product} />
                     </div>
                 </div>
 
@@ -158,11 +156,8 @@ function ShopPageProduct(props) {
     return (
         <React.Fragment>
             <Helmet>
-                <title>{`${product.name} — ${theme.name}`}</title>
+                <title>{`${theme.name}`}</title>
             </Helmet>
-
-            <PageHeader breadcrumb={breadcrumb} />
-
             {content}
         </React.Fragment>
     );

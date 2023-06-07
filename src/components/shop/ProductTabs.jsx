@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 // application
 import ProductTabDescription from './ProductTabDescription';
-import ProductTabSpecification from './ProductTabSpecification';
+// import ProductTabSpecification from './ProductTabSpecification';
 import ProductTabReviews from './ProductTabReviews';
 
 class ProductTabs extends Component {
@@ -25,14 +25,14 @@ class ProductTabs extends Component {
 
     render() {
         const { currentTab } = this.state;
-        const { withSidebar } = this.props;
+        const { withSidebar, product } = this.props;
         const classes = classNames('product-tabs', {
             'product-tabs--layout--sidebar': withSidebar,
         });
 
         const tabs = [
-            { key: 'description', title: 'Description', content: <ProductTabDescription /> },
-            { key: 'specification', title: 'Specification', content: <ProductTabSpecification /> },
+            { key: 'description', title: 'Description', content: <ProductTabDescription product={product} /> },
+            // { key: 'specification', title: 'Specification', content: <ProductTabSpecification /> },
             { key: 'reviews', title: 'Reviews', content: <ProductTabReviews /> },
         ];
 

@@ -55,7 +55,7 @@ class Product extends Component {
         }
 
         return (
-            <div className={`product product--layout--${layout}`}>
+            <div className={`product product--layout--${layout} mt-3`}>
                 <div className="product__content">
                     <ProductGallery layout={layout} images={product.images} />
 
@@ -102,12 +102,10 @@ class Product extends Component {
                                 <Rating value={product.rating} />
                             </div>
                             <div className="product__rating-legend">
-                                <Link to="/">{`${product.reviews} Reviews`}</Link>
-                                <span>/</span>
-                                <Link to="/">Write A Review</Link>
+                                {`${product.reviews} Reviews`}
                             </div>
                         </div>
-                        <div className="product__description">
+                        {/* <div className="product__description">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
                             ornare, mi in ornare elementum, libero nibh lacinia urna, quis
                             convallis lorem erat at purus. Maecenas eu varius nisi.
@@ -118,18 +116,20 @@ class Product extends Component {
                             <li>Battery Cell Type: Lithium</li>
                             <li>Voltage: 20 Volts</li>
                             <li>Battery Capacity: 2 Ah</li>
-                        </ul>
+                        </ul> */}
                         <ul className="product__meta">
                             <li className="product__meta-availability">
                                 Availability:
                                 {' '}
-                                <span className="text-success">In Stock</span>
+
+                                <span className={product.stock > 0 ? 'text-success' : 'text-danger'}>{product.availability}</span>
                             </li>
                             <li>
                                 Brand:
-                                <Link to="/">Wakita</Link>
+                                {' '}
+                                {product.brand.name}
                             </li>
-                            <li>SKU: 83690/32</li>
+                            {/* <li>SKU: 83690/32</li> */}
                         </ul>
                     </div>
 
@@ -137,7 +137,7 @@ class Product extends Component {
                         <div className="product__availability">
                             Availability:
                             {' '}
-                            <span className="text-success">In Stock</span>
+                            <span className="text-success">{product.availability}</span>
                         </div>
 
                         <div className="product__prices">
@@ -145,68 +145,29 @@ class Product extends Component {
                         </div>
 
                         <form className="product__options">
-                            <div className="form-group product__option">
+                            {/* <div className="form-group product__option">
                                 <div className="product__option-label">Color</div>
                                 <div className="input-radio-color">
                                     <div className="input-radio-color__list">
-                                        <label
-                                            className="input-radio-color__item input-radio-color__item--white"
-                                            style={{ color: '#fff' }}
-                                            data-toggle="tooltip"
-                                            title="White"
-                                        >
-                                            <input type="radio" name="color" />
-                                            <span />
-                                        </label>
-                                        <label
-                                            className="input-radio-color__item"
-                                            style={{ color: '#ffd333' }}
-                                            data-toggle="tooltip"
-                                            title="Yellow"
-                                        >
-                                            <input type="radio" name="color" />
-                                            <span />
-                                        </label>
-                                        <label
-                                            className="input-radio-color__item"
-                                            style={{ color: '#ff4040' }}
-                                            data-toggle="tooltip"
-                                            title="Red"
-                                        >
-                                            <input type="radio" name="color" />
-                                            <span />
-                                        </label>
-                                        <label
-                                            className="input-radio-color__item input-radio-color__item--disabled"
-                                            style={{ color: '#4080ff' }}
-                                            data-toggle="tooltip"
-                                            title="Blue"
-                                        >
-                                            <input type="radio" name="color" disabled />
-                                            <span />
-                                        </label>
+                                        {
+                                            product?.colors?.length
+                                                ? product.colors.map((color) => (
+                                                    <React.Fragment>
+                                                        <label
+                                                            className="input-radio-color__item input-radio-color__item--white"
+                                                            style={{ color: color.name.toLowerCase() }}
+                                                            data-toggle="tooltip"
+                                                            title={color.name}
+                                                        >
+                                                            <input type="radio" name="color" />
+                                                            <span />
+                                                        </label>
+                                                    </React.Fragment>
+                                                )) : null
+                                        }
                                     </div>
                                 </div>
-                            </div>
-                            <div className="form-group product__option">
-                                <div className="product__option-label">Material</div>
-                                <div className="input-radio-label">
-                                    <div className="input-radio-label__list">
-                                        <label>
-                                            <input type="radio" name="material" />
-                                            <span>Metal</span>
-                                        </label>
-                                        <label>
-                                            <input type="radio" name="material" />
-                                            <span>Wood</span>
-                                        </label>
-                                        <label>
-                                            <input type="radio" name="material" disabled />
-                                            <span>Plastic</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> */}
                             <div className="form-group product__option">
                                 <label htmlFor="product-quantity" className="product__option-label">Quantity</label>
                                 <div className="product__actions">
@@ -216,7 +177,8 @@ class Product extends Component {
                                             aria-label="Quantity"
                                             className="product__quantity"
                                             size="lg"
-                                            min={1}
+                                            max={product.stock}
+                                            min={0}
                                             value={quantity}
                                             onChange={this.handleChangeQuantity}
                                         />
@@ -282,9 +244,10 @@ class Product extends Component {
                     <div className="product__footer">
                         <div className="product__tags tags">
                             <div className="tags__list">
-                                <Link to="/">Mounts</Link>
-                                <Link to="/">Electrodes</Link>
-                                <Link to="/">Chainsaws</Link>
+                                {
+                                   product?.tags?.length
+                                       ? product.tags.map((tag) => <Link to="/" onClick={(e) => e.preventDefault()}>{tag}</Link>) : null
+                                }
                             </div>
                         </div>
 
@@ -292,8 +255,7 @@ class Product extends Component {
                             <ul className="share-links__list">
                                 <li className="share-links__item share-links__item--type--like"><Link to="/">Like</Link></li>
                                 <li className="share-links__item share-links__item--type--tweet"><Link to="/">Tweet</Link></li>
-                                <li className="share-links__item share-links__item--type--pin"><Link to="/">Pin It</Link></li>
-                                <li className="share-links__item share-links__item--type--counter"><Link to="/">4K</Link></li>
+                                <li className="share-links__item share-links__item--type--tel"><Link to="/">Pin It</Link></li>
                             </ul>
                         </div>
                     </div>

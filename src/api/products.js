@@ -15,8 +15,8 @@ export function getNewArrivalProducts(limit, onSuccess, onFail) {
     getRequest(path, onSuccess, onFail);
 }
 
-export function getRelatedProducts(id, onSuccess, onFail) {
-    const path = `/api/v1/product/related/${id}`;
+export function getRelatedProducts(productId, onSuccess, onFail) {
+    const path = `/api/v1/product/related/${productId}`;
     getRequest(path, onSuccess, onFail);
 }
 
