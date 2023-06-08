@@ -1,8 +1,8 @@
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { WISHLIST_ADD_ITEM, WISHLIST_REMOVE_ITEM } from './wishlistActionTypes';
 
 export function wishlistAddItemSuccess(product) {
-    toast.success(`Product "${product.name}" added to wish list!`, { theme: 'colored' });
+    // toast.success(`Product "${product.name}" added to wish list!`, { theme: 'colored' });
 
     return {
         type: WISHLIST_ADD_ITEM,

@@ -147,13 +147,13 @@ class ShopPageCart extends Component {
         const extraLines = cart.extraLines.map((extraLine, index) => {
             let calcShippingLink;
 
-            if (extraLine.type === 'shipping') {
-                calcShippingLink = (
-                    <div className="cart__calc-shipping">
-                        <Link to="/">Calculate Shipping</Link>
-                    </div>
-                );
-            }
+            // if (extraLine.type === 'shipping') {
+            //     calcShippingLink = (
+            //         <div className="cart__calc-shipping">
+            //             <Link to="/">Calculate Shipping</Link>
+            //         </div>
+            //     );
+            // }
 
             return (
                 <tr key={index}>

@@ -145,7 +145,7 @@ class Product extends Component {
                         </div>
 
                         <form className="product__options">
-                            {/* <div className="form-group product__option">
+                            <div className="form-group product__option">
                                 <div className="product__option-label">Color</div>
                                 <div className="input-radio-color">
                                     <div className="input-radio-color__list">
@@ -153,21 +153,15 @@ class Product extends Component {
                                             product?.colors?.length
                                                 ? product.colors.map((color) => (
                                                     <React.Fragment>
-                                                        <label
-                                                            className="input-radio-color__item input-radio-color__item--white"
-                                                            style={{ color: color.name.toLowerCase() }}
-                                                            data-toggle="tooltip"
-                                                            title={color.name}
-                                                        >
-                                                            <input type="radio" name="color" />
-                                                            <span />
-                                                        </label>
+                                                        <div className="color__item">
+                                                            {color.name}
+                                                        </div>
                                                     </React.Fragment>
                                                 )) : null
                                         }
                                     </div>
                                 </div>
-                            </div> */}
+                            </div>
                             <div className="form-group product__option">
                                 <label htmlFor="product-quantity" className="product__option-label">Quantity</label>
                                 <div className="product__actions">
@@ -178,7 +172,7 @@ class Product extends Component {
                                             className="product__quantity"
                                             size="lg"
                                             max={product.stock}
-                                            min={0}
+                                            min={1}
                                             value={quantity}
                                             onChange={this.handleChangeQuantity}
                                         />

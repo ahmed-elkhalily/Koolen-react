@@ -1,8 +1,7 @@
-import { toast } from 'react-toastify';
 import { COMPARE_ADD_ITEM, COMPARE_REMOVE_ITEM } from './compareActionTypes';
 
 export function compareAddItemSuccess(product) {
-    toast.success(`Product "${product.name}" added to compare!`, { theme: 'colored' });
+    // toast.success(`Product "${product.name}" added to compare!`, { theme: 'colored' });
 
     return {
         type: COMPARE_ADD_ITEM,

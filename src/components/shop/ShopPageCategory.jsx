@@ -24,6 +24,9 @@ import { url, getCategoryParents } from '../../services/utils';
 
 // apis
 // import { getNewArrivalProducts } from '../../api/products';
+import { getNewArrivalProducts, getAllProducts as getAllProductsApi } from '../../api/products';
+import { toastError } from '../toast/toastComponent';
+import productsSchema from '../../helpers/productSchema';
 
 function parseQueryOptions(location) {
     const query = queryString.parse(location);
@@ -173,15 +176,53 @@ function ShopPageCategory(props) {
     const offcanvas = columns === 3 ? 'mobile' : 'always';
     const [state, dispatch] = useReducer(reducer, initialState, init);
     const [latestProducts, setLatestProducts] = useState([]);
-    // const [allProducts, setAllProducts] = useState([]);
-    // const [isLoading, setIsLoading] = useState(false);
-    // useEffect(() => {
-    //     getNewArrivalProducts(8, success=> {if (success.success){
+    const [allProducts, setAllProducts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [pages, setPages] = useState(1);
+    const [selectedPage, setSelectedPage] = useState(1);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const latestProductsLimit = 5;
 
-    //     }else {toastError(success)}}, fail=>{
-    //         toastError(fail)
-    //     })
-    // }, []);
+    function getAllProducts() {
+        setIsLoading(true);
+        getAllProductsApi(selectedPage, selectedCategory, (success) => {
+            setIsLoading(false);
+            if (success.success) {
+                const products = productsSchema(success.products.data);
+                setAllProducts({ items: products });
+                setPages(success.totalPage);
+            } else {
+                toastError(success);
+            }
+        }, (fail) => {
+            setIsLoading(false);
+            toastError(fail);
+        });
+    }
+
+    useEffect(() => {
+        setSelectedPage(1);
+    }, [selectedCategory]);
+
+    function reset() {
+        setSelectedCategory(null);
+        setSelectedPage(1);
+    }
+
+    useEffect(() => {
+        getNewArrivalProducts(latestProductsLimit, (success) => {
+            if (success.success) {
+                const products = productsSchema(success.data);
+                setLatestProducts(products);
+            } else {
+                toastError(success);
+            }
+        }, (fail) => { toastError(fail); });
+    }, []);
+
+    useEffect(() => {
+        getAllProducts();
+    }, [selectedPage, selectedCategory]);
 
     // Replace current url.
     useEffect(() => {
@@ -239,27 +280,6 @@ function ShopPageCategory(props) {
         };
     }, [dispatch, categorySlug, state.options, state.filters]);
 
-    // Load latest products.
-    useEffect(() => {
-        let canceled = false;
-
-        if (offcanvas === 'always') {
-            setLatestProducts([]);
-        } else {
-            shopApi.getLatestProducts({ limit: 5 }).then((result) => {
-                if (canceled) {
-                    return;
-                }
-
-                setLatestProducts(result);
-            });
-        }
-
-        return () => {
-            canceled = true;
-        };
-    }, [offcanvas]);
-
     if (state.categoryIsLoading || (state.productsListIsLoading && !state.productsList)) {
         return <BlockLoader />;
     }
@@ -283,16 +303,22 @@ function ShopPageCategory(props) {
 
     const productsView = (
         <ProductsView
-            isLoading={state.productsListIsLoading}
-            productsList={state.productsList}
+            isLoading={isLoading}
+            productsList={allProducts}
             options={state.options}
             filters={state.filters}
             dispatch={dispatch}
             layout={viewMode}
             grid={`grid-${columns}-${columns > 3 ? 'full' : 'sidebar'}`}
             offcanvas={offcanvas}
+            selectedPage={selectedPage}
+            setSelectedPage={setSelectedPage}
+            pages={pages}
+            reset={() => reset()}
         />
     );
+
+    // console.log('filters list: ', state.productsList.filters);
 
     const sidebarComponent = (
         <CategorySidebar offcanvas={offcanvas}>
@@ -300,9 +326,8 @@ function ShopPageCategory(props) {
                 <WidgetFilters
                     title="Filters"
                     offcanvas={offcanvas}
-                    filters={state.productsList.filters}
-                    values={state.filters}
-                    dispatch={dispatch}
+                    changeSelectedCategory={setSelectedCategory}
+                    selectedCategory={selectedCategory}
                 />
             </CategorySidebarItem>
             {offcanvas !== 'always' && (

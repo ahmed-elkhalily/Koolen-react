@@ -2,11 +2,11 @@
 import React from 'react';
 
 function ProductTabDescription({ product }) {
-    console.log(product);
     return (
-        <div className="typography">
-            {product?.description}
-        </div>
+        <div
+            className="typography"
+            dangerouslySetInnerHTML={{ __html: product?.description }}
+        />
     );
 }
 

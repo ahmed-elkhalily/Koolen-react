@@ -1,7 +1,11 @@
 import { getRequest } from './network';
 
-export function getAllProducts(onSuccess, onFail) {
-    const path = '/api/v1/product/search?&page=1&brand_ids=&attribute_values=&sort_by=popular';
+// dummy schema
+import reviews from '../data/shopProductReviews';
+
+export function getAllProducts(page, category, onSuccess, onFail) {
+    let path = `/api/v1/product/search?&page=${page}&brand_ids=&attribute_values=&sort_by=popular`;
+    if (category) path += `&category_slug=${category}`;
     getRequest(path, onSuccess, onFail);
 }
 
@@ -28,4 +32,16 @@ export function getSearchedProduct(searchVal, onSuccess, onFail) {
 export function getProductDetails(slug, onSuccess, onFail) {
     const path = `/api/v1/product/details/${slug}`;
     getRequest(path, onSuccess, onFail);
+}
+
+// productId
+export function getAllRatingAndReviews() {
+    return [...reviews];
+//    const path = `${}`
+//    getRequest(path, onSuccess,onFail)
+}
+
+export function addReviews(data) {
+    // eslint-disable-next-line
+    console.log('addReviews payload: ', data);
 }
