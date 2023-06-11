@@ -9,7 +9,9 @@ import PropTypes from 'prop-types';
 import theme from '../../data/theme';
 
 function SocialLinks(props) {
-    const { shape, className } = props;
+    const { shape, className, data } = props;
+    // , data
+    console.log('data: ', data);
 
     const classes = classNames(className, 'social-links', {
         'social-links--shape--circle': shape === 'circle',
@@ -22,7 +24,9 @@ function SocialLinks(props) {
         { type: 'youtube', url: theme.author.profile_url, icon: 'fab fa-youtube' },
         { type: 'instagram', url: theme.author.profile_url, icon: 'fab fa-instagram' },
         { type: 'rss', url: theme.author.profile_url, icon: 'fas fa-rss' },
-    ].map((item) => (
+    ];
+
+    items.map((item) => (
         <li key={item.type} className="social-links__item">
             <a
                 className={`social-links__link social-links__link--type--${item.type}`}
