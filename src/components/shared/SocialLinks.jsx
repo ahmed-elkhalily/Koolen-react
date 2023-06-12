@@ -9,9 +9,8 @@ import PropTypes from 'prop-types';
 import theme from '../../data/theme';
 
 function SocialLinks(props) {
-    const { shape, className, data } = props;
+    const { shape, className } = props;
     // , data
-    console.log('data: ', data);
 
     const classes = classNames(className, 'social-links', {
         'social-links--shape--circle': shape === 'circle',

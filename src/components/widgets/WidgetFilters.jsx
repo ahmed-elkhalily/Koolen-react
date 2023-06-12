@@ -6,22 +6,16 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 // application
+import { useIntl } from 'react-intl';
+import { useHistory } from 'react-router-dom';
 import Collapse from '../shared/Collapse';
 import FilterCategory from '../filters/FilterCategory';
 // import FilterCheck from '../filters/FilterCheck';
 // import FilterColor from '../filters/FilterColor';
 // import FilterRadio from '../filters/FilterRadio';
-// import FilterRange from '../filters/FilterRange';
+import FilterRange from '../filters/FilterRange';
 // import getFilterHandler from '../../services/filters';
 import { ArrowRoundedDown12x7Svg } from '../../svg';
-
-// const filterComponents = {
-//     category: FilterCategory,
-// range: FilterRange,
-// check: FilterCheck,
-// radio: FilterRadio,
-// color: FilterColor,
-// };
 
 function WidgetFilters(props) {
     const {
@@ -29,14 +23,18 @@ function WidgetFilters(props) {
         offcanvas,
         changeSelectedCategory,
         selectedCategory,
+        selectedPrices,
+        setSelectedPrices,
     } = props;
+    const history = useHistory();
+    const intl = useIntl();
 
-    // const handleValueChange = useCallback(({ filter, value }) => {
-    //     console.log(filter, value);
-    // }, []);
+    // console.log('Selected Prices: ', selectedPrices);
 
     const handleResetFilters = () => {
         changeSelectedCategory(null);
+        setSelectedPrices([0, 10000]);
+        history.push('/shop/catalog');
     };
 
     const filtersList = (
@@ -44,17 +42,34 @@ function WidgetFilters(props) {
             <Collapse
                 toggleClass="filter--opened"
                 render={({ toggle, setItemRef, setContentRef }) => (
-                    <div className="filter filter--opened" ref={setItemRef}>
-                        <button type="button" className="filter__title" onClick={toggle}>
-                            Categories
-                            <ArrowRoundedDown12x7Svg className="filter__arrow" />
-                        </button>
-                        <div className="filter__body" ref={setContentRef}>
-                            <div className="filter__container">
-                                <FilterCategory selectedCategory={selectedCategory} changeSelectedCategory={changeSelectedCategory} />
+                    <React.Fragment>
+                        <div className="filter filter--opened" ref={setItemRef}>
+                            <button type="button" className="filter__title" onClick={toggle}>
+                                {intl.formatMessage({ id: 'filter.categories' })}
+                                <ArrowRoundedDown12x7Svg className="filter__arrow" />
+                            </button>
+                            <div className="filter__body" ref={setContentRef}>
+                                <div className="filter__container">
+                                    <FilterCategory selectedCategory={selectedCategory} changeSelectedCategory={changeSelectedCategory} />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div className="filter filter--opened" ref={setItemRef}>
+                            <button type="button" className="filter__title" onClick={toggle}>
+                                {intl.formatMessage({
+                                    id: 'filter.price',
+                                })}
+                                <ArrowRoundedDown12x7Svg className="filter__arrow" />
+                            </button>
+                            <div className="filter__body" ref={setContentRef}>
+                                <div className="filter__container">
+                                    <FilterRange data={{ min: 0, max: 10000 }} value={selectedPrices} setSelectedPrices={setSelectedPrices} />
+                                </div>
+                            </div>
+
+                        </div>
+                    </React.Fragment>
+
                 )}
             />
         </div>
@@ -79,7 +94,8 @@ function WidgetFilters(props) {
                     className="btn btn-secondary btn-sm"
                     onClick={handleResetFilters}
                 >
-                    Reset
+
+                    {intl.formatMessage({ id: 'filter.reset' })}
                 </button>
             </div>
         </div>

@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // application
+import { useIntl } from 'react-intl';
 import AppLink from '../shared/AppLink';
 import languages from '../../i18n';
 import Megamenu from './Megamenu';
@@ -14,9 +15,22 @@ import Menu from './Menu';
 import { ArrowRoundedDown9x6Svg } from '../../svg';
 
 // data stubs
-import navLinks from '../../data/headerNavigation';
+// import navLinks from '../../data/headerNavigation';
 
 function NavLinks(props) {
+    const intl = useIntl();
+    const data = [
+        {
+            title: 'topbar.home',
+            url: '/',
+        }, {
+            title: 'topbar.shop',
+            url: '/shop/catalog',
+        }, {
+            title: 'topbar.categories',
+            url: '/categories',
+        }];
+
     const handleMouseEnter = (event) => {
         const { locale } = props;
         const { direction } = languages[locale];
@@ -52,7 +66,7 @@ function NavLinks(props) {
         }
     };
 
-    const linksList = navLinks.map((item, index) => {
+    const linksList = data.map((item, index) => {
         let arrow;
         let submenu;
 
@@ -84,7 +98,7 @@ function NavLinks(props) {
             <li key={index} className={classes} onMouseEnter={handleMouseEnter}>
                 <AppLink to={item.url} {...item.props}>
                     <span>
-                        {item.title}
+                        {intl.formatMessage({ id: item.title })}
                         {arrow}
                     </span>
                 </AppLink>

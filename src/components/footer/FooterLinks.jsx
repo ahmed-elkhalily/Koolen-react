@@ -4,6 +4,7 @@ import React from 'react';
 // third-party
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 export default function FooterLinks(props) {
     const { title, items } = props;
@@ -11,7 +12,7 @@ export default function FooterLinks(props) {
     const linksList = items.map((item, index) => (
         <li key={index} className="footer-links__item">
             <Link to={item.url} className="footer-links__link">
-                {item.title}
+                <FormattedMessage id={item.title} />
             </Link>
         </li>
     ));

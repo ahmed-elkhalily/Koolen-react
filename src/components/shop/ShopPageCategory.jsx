@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 
 // application
+import { useIntl } from 'react-intl';
 import BlockLoader from '../blocks/BlockLoader';
 import CategorySidebar from './CategorySidebar';
 import CategorySidebarItem from './CategorySidebarItem';
@@ -181,11 +182,21 @@ function ShopPageCategory(props) {
     const [pages, setPages] = useState(1);
     const [selectedPage, setSelectedPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedPrices, setSelectedPrices] = useState([]);
     const latestProductsLimit = 5;
+    const intl = useIntl();
+
+    useEffect(() => {
+        if (props?.match?.params?.categorySlug) {
+            setSelectedCategory(props?.match?.params?.categorySlug);
+        } else {
+            setSelectedCategory(0);
+        }
+    }, [props?.match?.params?.categorySlug]);
 
     function getAllProducts() {
         setIsLoading(true);
-        getAllProductsApi(selectedPage, selectedCategory, (success) => {
+        getAllProductsApi(selectedPage, selectedCategory, selectedPrices, (success) => {
             setIsLoading(false);
             if (success.success) {
                 const products = productsSchema(success.products.data);
@@ -202,10 +213,11 @@ function ShopPageCategory(props) {
 
     useEffect(() => {
         setSelectedPage(1);
-    }, [selectedCategory]);
+    }, [selectedCategory, selectedPrices[0], selectedPrices[1]]);
 
     function reset() {
         setSelectedCategory(null);
+        setSelectedPrices([]);
         setSelectedPage(1);
     }
 
@@ -222,7 +234,7 @@ function ShopPageCategory(props) {
 
     useEffect(() => {
         getAllProducts();
-    }, [selectedPage, selectedCategory]);
+    }, [selectedPage, selectedCategory, selectedPrices]);
 
     // Replace current url.
     useEffect(() => {
@@ -324,10 +336,14 @@ function ShopPageCategory(props) {
         <CategorySidebar offcanvas={offcanvas}>
             <CategorySidebarItem>
                 <WidgetFilters
-                    title="Filters"
+                    title={intl.formatMessage({
+                        id: 'filter.filter',
+                    })}
                     offcanvas={offcanvas}
                     changeSelectedCategory={setSelectedCategory}
                     selectedCategory={selectedCategory}
+                    setSelectedPrices={setSelectedPrices}
+                    selectedPrices={selectedPrices}
                 />
             </CategorySidebarItem>
             {offcanvas !== 'always' && (

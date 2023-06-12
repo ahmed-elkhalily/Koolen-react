@@ -31,7 +31,6 @@ function AccountPagePassword({ auth }) {
         const payload = {
             name, email, phone, password: password.new, confirmPassword: password.reenter,
         };
-        console.log(payload);
         editUserInfo(payload, (success) => {
             if (success.success) {
                 toastSuccess(success);

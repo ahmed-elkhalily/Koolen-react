@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // application
+import { useIntl } from 'react-intl';
+import { useHistory } from 'react-router-dom';
 import Pagination from '../shared/Pagination';
 import ProductCard from '../shared/ProductCard';
 
@@ -25,12 +27,15 @@ function ProductsView(props) {
     } = props;
     // eslint-disable-next-line
     const [layout, setLayout] = useState(propsLayout);
+    const intl = useIntl();
+    const history = useHistory();
 
     // useSetOption('page', parseFloat, dispatch);
     const handlePageChange = (pageNumber) => { setSelectedPage(pageNumber); };
 
     const handleResetFilters = useCallback(() => {
         reset();
+        history.push('/shop/catalog');
     }, []);
 
     const productsListItems = productsList?.items?.map((product) => (
@@ -45,13 +50,13 @@ function ProductsView(props) {
 
     let content;
 
-    if (productsListItems.length > 0) {
+    if (productsListItems?.length > 0) {
         content = (
             <div className="products-view__content">
                 <div
                     className="products-view__list products-list"
-                    data-layout={layout !== 'list' ? grid : layout}
-                    data-with-features={layout === 'grid-with-features' ? 'true' : 'false'}
+                    data-layout={grid}
+                    data-with-features="false"
                 >
                     <div className="products-list__body">
                         {productsListItems}
@@ -70,14 +75,16 @@ function ProductsView(props) {
     } else {
         content = (
             <div className="products-view__empty">
-                <div className="products-view__empty-title">No matching items</div>
-                <div className="products-view__empty-subtitle">Try resetting the filters</div>
+                <div className="products-view__empty-title">{intl.formatMessage({ id: 'filter.noMatchingItems' })}</div>
+                <div className="products-view__empty-subtitle">
+                    {intl.formatMessage({ id: 'filter.tryRestting' })}
+                </div>
                 <button
                     type="button"
                     className="btn btn-primary btn-sm"
                     onClick={handleResetFilters}
                 >
-                    Reset filters
+                    {intl.formatMessage({ id: 'filter.reset' })}
                 </button>
             </div>
         );

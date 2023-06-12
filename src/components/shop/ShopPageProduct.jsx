@@ -91,7 +91,6 @@ function ShopPageProduct(props) {
     }
 
     let content;
-    console.log('product: ', product);
 
     if (layout === 'sidebar') {
         const sidebar = (
@@ -156,7 +155,9 @@ function ShopPageProduct(props) {
     return (
         <React.Fragment>
             <Helmet>
-                <title>{`${theme.name}`}</title>
+                <title>
+                    {`${theme.name}`}
+                </title>
             </Helmet>
             {content}
         </React.Fragment>

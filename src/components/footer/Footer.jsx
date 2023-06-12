@@ -16,6 +16,7 @@ import BlockLoader from '../blocks/BlockLoader';
 export default function Footer() {
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState(null);
+
     useEffect(() => {
         getFooterData((success) => {
             if (success) {
@@ -33,17 +34,20 @@ export default function Footer() {
     // console.log('footerData: ', data);
 
     const informationLinks = [
-        { title: 'About Us', url: '/site/about-us' },
-        { title: 'Contact Us', url: '/site/contact-us' },
-        { title: 'Terms And Conditions', url: '/site/terms' },
-        { title: 'FAQs', url: '/site/faq' },
+        { title: 'footer.aboutus', url: '/site/about-us' },
+        { title: 'footer.contactus', url: '/site/contact-us' },
+        { title: 'footer.terms-conditions', url: '/site/terms' },
+        { title: 'footer.shipment-policy', url: '/site/terms' },
+        { title: 'footer.refundPolicy', url: '/site/terms' },
+        { title: 'footer.privacyPolicy', url: '/site/terms' },
+        { title: 'footer.faqs', url: '/site/faq' },
     ];
 
     const accountLinks = [
-        { title: 'Dashboard', url: '/account/dashboard' },
-        { title: 'Edit Profile', url: '/account/profile' },
-        { title: 'Order History', url: '/account/orders' },
-        { title: 'Addresses', url: '/account/addresses' },
+        { title: 'account.dashboard', url: '/account/dashboard' },
+        { title: 'account.editProfile', url: '/account/profile' },
+        { title: 'account.orderHistory', url: '/account/orders' },
+        { title: 'account.addresses', url: '/account/addresses' },
     ];
 
     if (isLoading) return <BlockLoader />;

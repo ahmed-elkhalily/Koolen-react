@@ -32,9 +32,7 @@ export function addNewAddress({
 
 export function editAddress(data, onSuccess, onFail) {
     const path = '/api/v1/user/address/update';
-    console.log(data.postalCode);
     const updatedData = { ...data, postal_code: data.postalCode };
-    console.log(updatedData);
     postRequest(path, updatedData, onSuccess, onFail);
 }
 

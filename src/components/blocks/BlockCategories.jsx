@@ -14,6 +14,7 @@ import { toastError } from '../toast/toastComponent';
 export default function BlockCategories(props) {
     const { title, layout, categories } = props;
     const [mycategories, setCategories] = useState([]);
+    // eslint-disable-next-line
     console.log('my categories are: ', mycategories, categories);
 
     useEffect(() => {
@@ -36,7 +37,6 @@ export default function BlockCategories(props) {
             counter = 0;
             level += 1;
         }
-        console.log('counter, level: ', index, counter, level);
         if (level % 2 === 0 && counter % 5 === 0 && counter !== 0 && level !== 0) {
             classes += ' col-md-8';
         } else {

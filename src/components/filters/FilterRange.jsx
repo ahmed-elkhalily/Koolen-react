@@ -12,8 +12,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // application
+import { useIntl } from 'react-intl';
 import Currency from '../shared/Currency';
 import languages from '../../i18n';
+//
 
 function getFirstValidValue(...values) {
     return values.reduce((acc, value) => (
@@ -29,12 +31,14 @@ function FilterRange(props) {
         value,
         onChangeValue,
         locale,
+        setSelectedPrices,
     } = props;
     const { direction } = languages[locale];
     const [propsFrom, propsTo] = value || [];
     const [timer, setTimer] = useState(null);
     const [state, setState] = useState([propsFrom, propsTo]);
     const [stateFrom, stateTo] = state;
+    const intl = useIntl();
 
     let { min, max } = data;
     let from = Math.max(getFirstValidValue(stateFrom, propsFrom, min), min);
@@ -81,6 +85,10 @@ function FilterRange(props) {
         }
     }, [min, max, data, onChangeValue, direction, setTimer, setState]);
 
+    function handleChangeComplete() {
+        setSelectedPrices(state);
+    }
+
     return useMemo(() => (
         <div className="filter-price">
             <div className="filter-price__slider" dir="ltr">
@@ -90,10 +98,12 @@ function FilterRange(props) {
                     value={{ min: from, max: to }}
                     step={1}
                     onChange={handleChange}
+                    onChangeComplete={() => handleChangeComplete()}
                 />
             </div>
             <div className="filter-price__title">
-                Price:
+                {intl.formatMessage({ id: 'filter.price' })}
+                :
                 {' '}
                 <span className="filter-price__min-value"><Currency value={fromLabel} /></span>
                 {' – '}

@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 // application
+import { useIntl } from 'react-intl';
 import PageHeader from '../shared/PageHeader';
 
 // data stubs
@@ -29,11 +30,12 @@ function AccountPageLogin(props) {
     const [regPass, setRegPass] = useState('');
     const [regMatchingPass, setRegMatchingPass] = useState('');
     const { dispatch } = props;
+    const intl = useIntl();
 
-    const breadcrumb = [
-        { title: 'Home', url: '/' },
-        { title: 'My Account', url: '' },
-    ];
+    // const breadcrumb = [
+    //     { title: 'Home', url: '/' },
+    //     { title: 'My Account', url: '' },
+    // ];
 
     function resetData() {
         setRegEmail('');
@@ -77,7 +79,9 @@ function AccountPageLogin(props) {
                 <title>{`Login — ${theme.name}`}</title>
             </Helmet>
 
-            <PageHeader header="My Account" breadcrumb={breadcrumb} />
+            <div className="mt-2">
+                <PageHeader header="My Account" breadcrumb={[]} />
+            </div>
 
             <div className="block">
                 <div className="container">
@@ -85,35 +89,35 @@ function AccountPageLogin(props) {
                         <div className="col-md-6 d-flex">
                             <div className="card flex-grow-1 mb-md-0">
                                 <div className="card-body">
-                                    <h3 className="card-title">Login</h3>
+                                    <h3 className="card-title">{intl.formatMessage({ id: 'login.login' })}</h3>
                                     <form>
                                         <div className="form-group">
-                                            <label htmlFor="login-email">Email address</label>
+                                            <label htmlFor="login-email">{intl.formatMessage({ id: 'login.email' })}</label>
                                             <input
                                                 id="login-email"
                                                 type="email"
                                                 className="form-control"
-                                                placeholder="Enter email"
+                                                placeholder={intl.formatMessage({ id: 'login.email' })}
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                             />
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="login-password">Password</label>
+                                            <label htmlFor="login-password">{intl.formatMessage({ id: 'login.password' })}</label>
                                             <input
                                                 id="login-password"
                                                 type="password"
                                                 className="form-control"
-                                                placeholder="Password"
+                                                placeholder={intl.formatMessage({ id: 'login.password' })}
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                             />
                                             <small className="form-text text-muted">
-                                                <Link to="/">Forgotten Password</Link>
+                                                <Link to="/">{intl.formatMessage({ id: 'login.forgetPass' })}</Link>
                                             </small>
                                         </div>
                                         <button type="submit" onClick={submitLogin} className="btn btn-primary mt-2 mt-md-3 mt-lg-4">
-                                            Login
+                                            {intl.formatMessage({ id: 'login.login' })}
                                         </button>
                                     </form>
                                 </div>
@@ -122,67 +126,69 @@ function AccountPageLogin(props) {
                         <div className="col-md-6 d-flex mt-4 mt-md-0">
                             <div className="card flex-grow-1 mb-0">
                                 <div className="card-body">
-                                    <h3 className="card-title">Register</h3>
+                                    <h3 className="card-title">{intl.formatMessage({ id: 'login.register' })}</h3>
                                     <form>
                                         <div className="form-group">
-                                            <label htmlFor="name">Full Name</label>
+                                            <label htmlFor="name">{intl.formatMessage({ id: 'login.fullName' })}</label>
                                             <input
                                                 id="name"
                                                 type="text"
                                                 name="name"
                                                 className="form-control"
-                                                placeholder="Enter Name"
+                                                placeholder={intl.formatMessage({ id: 'login.fullName' })}
                                                 value={regName}
                                                 onChange={(e) => setRegName(e.target.value)}
                                             />
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="phone">Phone</label>
+                                            <label htmlFor="phone">{intl.formatMessage({ id: 'login.phone' })}</label>
                                             <input
                                                 id="phone"
                                                 type="text"
                                                 name="phone"
                                                 className="form-control"
-                                                placeholder="Enter Phone"
+                                                placeholder={intl.formatMessage({ id: 'login.phone' })}
                                                 value={regphone}
                                                 onChange={(e) => setRegPhone(e.target.value)}
                                             />
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="register-email">Email address</label>
+                                            <label htmlFor="register-email">{intl.formatMessage({ id: 'login.email' })}</label>
                                             <input
                                                 id="register-email"
                                                 type="email"
                                                 className="form-control"
-                                                placeholder="Enter email"
+                                                placeholder={intl.formatMessage({ id: 'login.email' })}
                                                 value={regEmail}
                                                 onChange={(e) => setRegEmail(e.target.value)}
                                             />
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="register-password">Password</label>
+                                            <label htmlFor="register-password">{intl.formatMessage({ id: 'login.password' })}</label>
                                             <input
                                                 id="register-password"
                                                 type="password"
                                                 className="form-control"
-                                                placeholder="Password"
+                                                placeholder={intl.formatMessage({ id: 'login.password' })}
                                                 value={regPass}
                                                 onChange={(e) => setRegPass(e.target.value)}
                                             />
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="register-confirm">Repeat Password</label>
+                                            <label htmlFor="register-confirm">
+                                                {intl.formatMessage({ id: 'login.repeatPass' })}
+                                            </label>
                                             <input
                                                 id="register-confirm"
                                                 type="password"
                                                 className="form-control"
-                                                placeholder="Password"
+                                                placeholder={intl.formatMessage({ id: 'login.repeatPass' })}
                                                 value={regMatchingPass}
                                                 onChange={(e) => setRegMatchingPass(e.target.value)}
                                             />
                                         </div>
                                         <button onClick={register} type="submit" className="btn btn-primary mt-2 mt-md-3 mt-lg-4">
-                                            Register
+                                            {intl.formatMessage({ id: 'login.register' })}
                                         </button>
                                     </form>
                                 </div>
@@ -196,7 +202,6 @@ function AccountPageLogin(props) {
 }
 
 function mapStateToProps(state) {
-    console.log('state: ', state);
     return {
         auth: state,
     };

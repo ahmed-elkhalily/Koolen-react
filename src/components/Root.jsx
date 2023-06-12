@@ -20,7 +20,7 @@ import { localeChange } from '../store/locale';
 
 // pages
 import Layout from './Layout';
-import HomePageOne from './home/HomePageOne';
+// import HomePageOne from './home/HomePageOne';
 import HomePageTwo from './home/HomePageTwo';
 import { getToken } from '../api/network';
 
@@ -64,17 +64,17 @@ class Root extends Component {
                         <ScrollContext shouldUpdateScroll={this.shouldUpdateScroll}>
                             <Switch>
                                 <Route
-                                    path="/home-two"
+                                    path="/"
                                     render={(props) => (
                                         <Layout {...props} headerLayout="compact" homeComponent={HomePageTwo} />
                                     )}
                                 />
-                                <Route
+                                {/* <Route
                                     path="/"
                                     render={(props) => (
                                         <Layout {...props} headerLayout="default" homeComponent={HomePageOne} />
                                     )}
-                                />
+                                /> */}
                                 <Redirect to="/" />
                             </Switch>
                         </ScrollContext>

@@ -50,6 +50,8 @@ function Menu(props) {
             submenu = (
                 <div className="menu__submenu">
                     <Menu items={item.submenu} />
+                    {' '}
+
                 </div>
             );
         }

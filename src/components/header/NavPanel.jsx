@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 // application
 import CartIndicator from './IndicatorCart';
-import Departments from './Departments';
+// import Departments from './Departments';
 import Indicator from './Indicator';
 import IndicatorAccount from './IndicatorAccount';
 import IndicatorSearch from './IndicatorSearch';
@@ -19,7 +19,7 @@ function NavPanel(props) {
     const { layout, wishlist } = props;
 
     let logo = null;
-    let departments = null;
+    // const departments = null;
     let searchIndicator;
 
     if (layout === 'compact') {
@@ -32,20 +32,11 @@ function NavPanel(props) {
         searchIndicator = <IndicatorSearch />;
     }
 
-    if (layout === 'default') {
-        departments = (
-            <div className="nav-panel__departments">
-                <Departments />
-            </div>
-        );
-    }
-
     return (
         <div className="nav-panel">
             <div className="nav-panel__container container">
                 <div className="nav-panel__row">
                     {logo}
-                    {departments}
 
                     <div className="nav-panel__nav-links nav-links">
                         <NavLinks />

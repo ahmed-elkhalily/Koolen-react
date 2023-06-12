@@ -7,14 +7,12 @@ import { Link } from 'react-router-dom';
 
 // application
 // import { ArrowRoundedLeft6x9Svg } from '../../svg';
-import { url } from '../../services/utils';
+// import { url } from '../../services/utils';
 import { getAllCategories } from '../../api/categories';
 import { toastError } from '../toast/toastComponent';
 
 function FilterCategory({ selectedCategory, changeSelectedCategory }) {
     const [categories, setCategories] = useState([]);
-
-    console.log(selectedCategory);
 
     useEffect(() => {
         getAllCategories((success) => {
@@ -26,8 +24,7 @@ function FilterCategory({ selectedCategory, changeSelectedCategory }) {
         }, (fail) => toastError(fail));
     }, []);
 
-    function changeCategory(e, category) {
-        e.preventDefault();
+    function changeCategory(category) {
         changeSelectedCategory(category.slug);
     }
 
@@ -47,7 +44,7 @@ function FilterCategory({ selectedCategory, changeSelectedCategory }) {
                     </li>
                 ))} */}
                 <li className={itemClasses}>
-                    <Link to={url.category(category)} onClick={(e) => changeCategory(e, category)}>{category.name}</Link>
+                    <Link to={`/shop/catalog/${category.slug}`} onClick={() => changeCategory(category)}>{category.name}</Link>
                 </li>
                 {/* {category.children && category.children.map((child) => (
                     <li key={child.id} className="filter-categories__item filter-categories__item--child">

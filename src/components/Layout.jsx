@@ -36,6 +36,7 @@ import SitePageFaq from './site/SitePageFaq';
 import SitePageNotFound from './site/SitePageNotFound';
 import SitePageTerms from './site/SitePageTerms';
 import SitePageTypography from './site/SitePageTypography';
+import CategoriesPage from './categories/Categories';
 
 // data stubs
 import theme from '../data/theme';
@@ -119,6 +120,14 @@ function Layout(props) {
                                 <ShopPageCategory {...props} columns={3} viewMode="grid" sidebarPosition="start" />
                             )}
                         />
+                        <Route
+                            exact
+                            path="/shop/catalog/:categorySlug"
+                            render={(props) => (
+                                <ShopPageCategory {...props} columns={3} viewMode="grid" sidebarPosition="start" />
+                            )}
+                        />
+
                         <Route
                             exact
                             path="/shop/catalog/:categorySlug"
@@ -230,6 +239,7 @@ function Layout(props) {
                         <Route exact path="/site/faq" component={SitePageFaq} />
                         <Route exact path="/site/terms" component={SitePageTerms} />
                         <Route exact path="/site/typography" component={SitePageTypography} />
+                        <Route exact path="/categories" component={CategoriesPage} />
 
                         {/*
                         // Page Not Found

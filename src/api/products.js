@@ -3,9 +3,10 @@ import { getRequest } from './network';
 // dummy schema
 import reviews from '../data/shopProductReviews';
 
-export function getAllProducts(page, category, onSuccess, onFail) {
+export function getAllProducts(page, category, prices, onSuccess, onFail) {
     let path = `/api/v1/product/search?&page=${page}&brand_ids=&attribute_values=&sort_by=popular`;
     if (category) path += `&category_slug=${category}`;
+    if (prices?.length) path += `&min_price=${prices[0]}&max_price=${prices[1]}`;
     getRequest(path, onSuccess, onFail);
 }
 
